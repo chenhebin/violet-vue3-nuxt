@@ -1,3 +1,4 @@
+import { ApiError } from '~/api/error'
 import { getMe, postLogin, postLogout, type AuthUser, type LoginPayload, type MockScene } from '~/api/auth'
 import type { ApiClient, TokenStorage } from '~/services/types'
 

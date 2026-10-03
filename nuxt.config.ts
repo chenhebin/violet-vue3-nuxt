@@ -2,13 +2,20 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-09-01',
   devtools: { enabled: true },
   telemetry: false,
-  modules: ['@nuxt/eslint', '@nuxtjs/i18n'],
+  modules: ['@nuxt/eslint', '@nuxtjs/i18n', '@nuxt/scripts'],
+  // 常量登记册目录（键名/事件名）：加入 auto-import，调用点零 import 引用
+  imports: { dirs: ['constants'] },
   css: ['~/assets/css/main.css'],
   app: {
     pageTransition: { name: 'page', mode: 'out-in' }
   },
   runtimeConfig: {
-    public: { apiBase: '/api' }
+    public: {
+      // API 基础路径
+      apiBase: '/api',
+      // 埋点配置
+      umami: { hostUrl: '', websiteId: '' }
+    }
   },
   nitro: {
     routeRules: {

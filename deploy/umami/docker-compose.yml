@@ -1,0 +1,31 @@
+name: violet-umami
+services:
+  umami:
+    image: docker.umami.is/umami-software/umami:postgresql-latest
+    container_name: violet-umami
+    ports:
+      - '127.0.0.1:8300:3000'
+    environment:
+      DATABASE_URL: postgresql://umami:violet_umami_pw@db:5432/umami
+      APP_SECRET: violet-local-dev-secret-0123456789abcdef0123456789
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  db:
+    image: postgres:17-alpine
+    container_name: violet-umami-db
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: violet_umami_pw
+    volumes:
+      - violet-umami-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U umami']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+volumes:
+  violet-umami-db-data:

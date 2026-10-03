@@ -1,3 +1,4 @@
+import { API_ERROR_BANNER_I18N, toOutcome } from '~/api/error'
 import { AUTH_ERROR_I18N } from '~/api/auth'
 import type { AuthErrorCode, AuthUser, LoginPayload, MockScene } from '~/api/auth'
 
@@ -15,6 +16,7 @@ import type { AuthErrorCode, AuthUser, LoginPayload, MockScene } from '~/api/aut
  */
 export function useAuth() {
   const { $authService } = useNuxtApp()
+  const { track, identify } = useTrack()
   const { t } = useLocale()
   const user = useState<AuthUser | null>(AUTH_STATE_KEYS.user, () => null)
   const pending = ref(false)
@@ -43,26 +45,32 @@ export function useAuth() {
     const result = await toOutcome(() => $authService.login(payload, scene))
     if (result.ok) {
       user.value = result.data
+      // 用户身份标记（setBaseData)
+      identify(String(result.data.id))
+      track(TRACK_EVENTS.loginSuccess)
       await navigateTo('/me')
     } else {
       error.value = result.error
+      track(TRACK_EVENTS.loginFail, { kind: result.error.kind, code: result.error.code })
     }
     pending.value = false
   }
 
   /** 登出：无论后端结果如何都清空本地会话（service 层 try/finally 兜底） */
   async function logout() {
+    track(TRACK_EVENTS.logout)
     await $authService.logout()
     user.value = null
     error.value = null
     await navigateTo('/login')
   }
 
-  /** 供 useAsyncData 消费的会话加载器：异常一律经 toOutcome 转数据 */
-  function loadMe(scene: MockScene = ''): Promise<AsyncOutcome<AuthUser>> {
-    return toOutcome(() => $authService.fetchMe(scene))
+  /** 供 useAsyncData 消费的会话加载器：异常一律经 toOutcome 转数据；auth 失败上报会话过期 */
+  async function loadMe(scene: MockScene = ''): Promise<AsyncOutcome<AuthUser>> {
+    const result = await toOutcome(() => $authService.fetchMe(scene))
+    if (!result.ok && result.error.kind === 'auth') track(TRACK_EVENTS.sessionExpired)
+    return result
   }
-
   return {
     user,
     pending,

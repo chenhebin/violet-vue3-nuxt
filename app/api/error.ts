@@ -1,12 +1,13 @@
 /**
- * 错误体系运行时模块（app/utils/ = 非组合式的运行时单一家，自动导入）。
+ * 错误体系运行时模块（传输协议层公共件，非业务域，不套域格子目录）。
  *
- * 职责边界：
+ * 职责边界（三级归属）：
  * - 本文件：错误体系的「运行时产物」——类、转换器、形状级文案映射
  * - shared/types/api.ts：错误体系的「编译时契约」——Kind/Snapshot/Outcome 纯类型
- * - composables/useApi.ts：传输工厂（消费本模块做归一化）
+ * - composables/useApi.ts：唯一生产者（拦截器内构造 ApiError，与信封解包同族）
  *
  * 变化预期：将来错误上报（Sentry 位）、traceId 富化在本模块内生长，不搅动传输层。
+ * 注：api/ 不在 auto-import 目录——消费方显式 import '~/api/error'（对齐 AUTH_ERROR_I18N 的既有模式）。
  */
 
 // 全站唯一错误形态：协议层归一化产物，上层只面对它，不接触 FetchError

@@ -55,5 +55,24 @@ export default withNuxt(
         }
       ]
     }
+  },
+  {
+    /**
+     * 常量层门禁：app/constants/ 只允许常量与纯类型导出（登记册制度），
+     * 禁止函数/类——函数归 app/utils/，有状态逻辑归 composables/。
+     */
+    files: ['app/constants/**/*.ts'],
+    rules: {
+      'no-restricted-syntax': ['error',
+        {
+          selector: "ExportNamedDeclaration[declaration.type='FunctionDeclaration']",
+          message: 'app/constants 只允许常量/纯类型导出：函数请放 app/utils/，有状态逻辑放 composables/。'
+        },
+        {
+          selector: "ExportNamedDeclaration[declaration.type='ClassDeclaration']",
+          message: 'app/constants 只允许常量/纯类型导出：类请放 app/utils/ 或域内模块。'
+        }
+      ]
+    }
   }
 )

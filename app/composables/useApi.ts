@@ -1,8 +1,9 @@
 import type { Ref } from 'vue'
+import { ApiError } from '~/api/error'
 
 /**
  * 传输层组合式：网关客户端工厂与取用器。
- * 只做「传输」——动态头注入 + 信封解包 + 错误归一化（错误体系运行时见 utils/api-error.ts）。
+ * 只做「传输」——动态头注入 + 信封解包 + 错误归一化（错误体系运行时见 ~/api/error.ts）。
  * 业务无关；token / locale 由调用方（组合根）以 Ref 注入，本层不关心其来源，
  * 也不依赖任何需要组件 setup 上下文的 composable（插件中可安全调用）。
  * @param options 选项
