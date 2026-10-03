@@ -1,0 +1,32 @@
+{
+  "nav": { "home": "首页", "about": "关于" },
+  "home": { "title": "Violet 首页", "desc": "Violet C 端站点骨架示例页" },
+  "about": { "title": "关于我们", "desc": "关于 Violet 的介绍页" },
+  "login": {
+    "title": "登录",
+    "desc": "Violet 登录示例",
+    "username": "用户名",
+    "password": "密码",
+    "submit": "登录",
+    "pending": "登录中…",
+    "hint": "演示账号：violet / 123456",
+    "scene": "模拟异常",
+    "sceneNone": "正常",
+    "scene500": "服务端 500",
+    "sceneTimeout": "请求超时"
+  },
+  "me": {
+    "title": "我的",
+    "nickname": "昵称",
+    "logout": "登出",
+    "relogin": "去登录",
+    "expired": "登录已过期，请重新登录",
+    "simulateExpired": "模拟 token 过期"
+  },
+  "error": {
+    "network": "网络异常，请稍后重试",
+    "http": "服务开小差了，请稍后重试",
+    "1001": "用户名或密码错误",
+    "fallback": "操作失败，请重试"
+  }
+}

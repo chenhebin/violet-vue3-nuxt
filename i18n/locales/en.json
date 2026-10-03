@@ -1,0 +1,32 @@
+{
+  "nav": { "home": "Home", "about": "About" },
+  "home": { "title": "Violet Home", "desc": "Violet consumer site skeleton demo page" },
+  "about": { "title": "About Us", "desc": "Introduction page of Violet" },
+  "login": {
+    "title": "Sign In",
+    "desc": "Violet login demo",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign In",
+    "pending": "Signing in…",
+    "hint": "Demo account: violet / 123456",
+    "scene": "Simulate error",
+    "sceneNone": "Normal",
+    "scene500": "Server 500",
+    "sceneTimeout": "Timeout"
+  },
+  "me": {
+    "title": "Me",
+    "nickname": "Nickname",
+    "logout": "Sign Out",
+    "relogin": "Go to login",
+    "expired": "Session expired, please sign in again",
+    "simulateExpired": "Simulate token expiry"
+  },
+  "error": {
+    "network": "Network error, please retry later",
+    "http": "Service unavailable, please retry later",
+    "1001": "Incorrect username or password",
+    "fallback": "Operation failed, please retry"
+  }
+}

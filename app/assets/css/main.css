@@ -1,0 +1,22 @@
+:root {
+  --v-bg: #ffffff;
+  --v-text: #1a1a1a;
+  --v-primary: #6c5ce7;
+  --v-muted: #8a8a8a;
+  --v-radius: 8px;
+  --v-max-width: 1080px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, 'PingFang SC', sans-serif; background: var(--v-bg); color: var(--v-text); }
+a { color: inherit; text-decoration: none; }
+
+.layout { min-height: 100dvh; display: flex; flex-direction: column; }
+.layout-pc .layout-main { width: 100%; max-width: var(--v-max-width); margin: 0 auto; padding: 24px; flex: 1; }
+.layout-m .layout-main { width: 100%; padding: 16px; flex: 1; }
+.layout-m { padding-bottom: env(safe-area-inset-bottom); }
+.layout-nav { display: flex; gap: 16px; align-items: center; padding: 12px 24px; border-bottom: 1px solid #eee; }
+.nav-action { background: none; border: none; padding: 0; font: inherit; color: var(--v-primary); cursor: pointer; }
+
+.page-enter-active, .page-leave-active { transition: opacity 0.25s ease; }
+.page-enter-from, .page-leave-to { opacity: 0; }
