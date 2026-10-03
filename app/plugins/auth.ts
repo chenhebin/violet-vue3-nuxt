@@ -1,4 +1,4 @@
-import { createAuthService } from '~/services/auth.service'
+import { createAuthService } from '~/services/auth'
 
 /**
  * auth 域组合根：会话业务的装配点。

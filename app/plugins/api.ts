@@ -1,4 +1,4 @@
-import type { TokenStorage } from '~/services/types'
+import type { TokenStorage } from '~/services/auth'
 
 /**
  * 传输组合根：拥有「带凭据的网关客户端」。

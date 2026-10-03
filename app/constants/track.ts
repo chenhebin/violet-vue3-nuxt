@@ -8,18 +8,19 @@
  * 3. 事件属性（device/locale 自动注入除外）登记在各挂点处，不在此处建模板
  */
 
-/** 业务事件登记（auth 域挂点：app/composables/useAuth.ts；设备域挂点：app/composables/useDevice.ts） */
+// 业务事件登记（auth 域挂点：app/composables/useAuth.ts；设备域挂点：app/composables/useDevice.ts）
 export const TRACK_EVENTS = {
-  /** 登录成功；登录后另有 identify 关联会话 */
+  // 登录成功；登录后另有 identify 关联会话
   loginSuccess: 'login_success',
-  /** 登录失败；属性：kind、code */
+  // 登录失败；属性：kind、code
   loginFail: 'login_fail',
-  /** 登出（无论后端结果） */
+  // 登出（无论后端结果）
   logout: 'logout',
-  /** 会话过期（loadMe 收到 auth 类失败） */
+  // 会话过期（loadMe 收到 auth 类失败）
   sessionExpired: 'session_expired',
-  /** 手动切端；属性：to ('pc'|'m') */
+  // 手动切端；属性：to ('pc'|'m')
   deviceSwitch: 'device_switch'
 } as const
 
+// 业务事件登记册值的联合类型
 export type TrackEventName = (typeof TRACK_EVENTS)[keyof typeof TRACK_EVENTS]

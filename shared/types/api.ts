@@ -3,7 +3,7 @@
  *
  * 类型三级归属规则（新类型落位判定）：
  * 1. 域内私有：仅一个业务域消费 → 域自己的 contracts（如 api/auth/contracts.ts）
- * 2. app 内分层抽象：仅 app 侧组合根/服务层消费 → services/types.ts（ApiClient、TokenStorage）
+ * 2. app 内分层抽象：跨域共享端口 → services/types.ts（如 ApiClient）；单域私有契约 → 该域格子 services/<domain>/contracts.ts
  * 3. 跨端公共：app 与 server 都要消费，或 ≥3 个域消费 → 本目录（shared/types/）
  *
  * 提升触发条件（记账制，防类型垃圾场）：
