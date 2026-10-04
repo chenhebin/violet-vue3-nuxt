@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const { t } = useLocale()
-const api = useApiClient()
-const { data } = await useAsyncData('hello', () => api<{ message: string; device: string }>('/hello'))
+const { data } = await useHello()
 </script>
 
 <template>

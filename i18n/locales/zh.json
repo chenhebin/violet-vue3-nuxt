@@ -2,6 +2,22 @@
   "nav": { "home": "首页", "about": "关于" },
   "home": { "title": "Violet 首页", "desc": "Violet C 端站点骨架示例页" },
   "about": { "title": "关于我们", "desc": "关于 Violet 的介绍页" },
+  "animation": {
+    "title": "动效范式示范",
+    "desc": "动画栈各效果门面的骨架示范页",
+    "heroTitle": "动效范式示范页",
+    "heroDesc": "以下每节对应一个效果门面：视差、钉住叙事、逐字入场、进场时间线、视频播放器。",
+    "splitTitle": "逐字入场 useSplitText",
+    "splitText": "标题文字将被逐字拆解浮现",
+    "parallaxTitle": "视差 useParallax",
+    "parallaxDesc": "滚动时背景层与前景层速度不同",
+    "pinTitle": "钉住叙事 usePinnedSection",
+    "pinStep1": "第一步：滚动时本节钉在视口",
+    "pinStep2": "第二步：内容随滚动切换",
+    "pinStep3": "第三步：滚完自然放行",
+    "videoTitle": "视频播放器 BasicCommonVideoPlayer",
+    "videoDesc": "进入视口自动播放，滚出即暂停"
+  },
   "login": {
     "title": "登录",
     "desc": "Violet 登录示例",
@@ -24,6 +40,9 @@
     "simulateExpired": "模拟 token 过期"
   },
   "error": {
+    "notFound": "页面不存在",
+    "desc": "页面或服务暂时不可用",
+    "back": "返回首页",
     "network": "网络异常，请稍后重试",
     "http": "服务开小差了，请稍后重试",
     "1001": "用户名或密码错误",

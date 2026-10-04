@@ -2,9 +2,11 @@
  * 样式入口装配点：nuxt.config 的 css 数组只指向本文件。
  * - tokens.css = token 登记册（唯一样式出处，新增 token 先登记再使用）
  * - base.css   = 全局基线（元素默认值 + 页面过渡）
+ * - lenis.css  = 平滑滚动官方修正（html.lenis{height:auto} 等，随供应商版本走）
  * - 分端布局样式在各 layouts/pc.vue、m.vue 的 <style scoped>；视图样式在各视图 SFC
  */
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "lenis/dist/lenis.css";
 @import "./tokens.css";
 @import "./base.css";

@@ -8,9 +8,5 @@ export default defineEventHandler((event) => {
     throw createError({ statusCode: 401, statusMessage: 'token invalid or expired' })
   }
 
-  return {
-    code: 0,
-    message: 'ok',
-    data: { id: 1, username: token.replace('v-mock-token-', ''), nickname: '紫罗兰' }
-  }
+  return apiOk({ id: 1, username: token.replace('v-mock-token-', ''), nickname: '紫罗兰' })
 })

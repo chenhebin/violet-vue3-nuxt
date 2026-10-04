@@ -38,7 +38,7 @@ export function useAuth() {
     return t(API_ERROR_BANNER_I18N[e.kind])
   })
 
-  /** 登录：成功写用户快照并跳转；失败落错误快照（数据形态，SSR 载荷安全） */
+  /** 登录：成功写用户快照并回跳——优先守卫携带的 redirect（仅站内路径，防开放重定向），默认 /me；失败落错误快照（数据形态，SSR 载荷安全） */
   async function login(payload: LoginPayload, scene: MockScene = '') {
     pending.value = true
     error.value = null
@@ -48,7 +48,8 @@ export function useAuth() {
       // 用户身份标记（setBaseData)
       identify(String(result.data.id))
       track(TRACK_EVENTS.loginSuccess)
-      await navigateTo('/me')
+      const redirect = useRoute().query.redirect
+      await navigateTo(typeof redirect === 'string' && /^\/(?!\/)/.test(redirect) ? redirect : '/me')
     } else {
       error.value = result.error
       track(TRACK_EVENTS.loginFail, { kind: result.error.kind, code: result.error.code })

@@ -23,20 +23,11 @@ export default defineEventHandler(async (event) => {
   const password = typeof body?.password === 'string' ? body.password : ''
 
   if (username !== DEMO_CREDENTIALS.username || password !== DEMO_CREDENTIALS.password) {
-    return {
-      code: 1001,
-      message: 'username or password mismatch',
-      traceId: `trace-${Date.now()}`,
-      data: null
-    }
+    return apiFail(1001, 'username or password mismatch')
   }
 
-  return {
-    code: 0,
-    message: 'ok',
-    data: {
-      token: `v-mock-token-${username}`,
-      user: { id: 1, username, nickname: '紫罗兰' }
-    }
-  }
+  return apiOk({
+    token: `v-mock-token-${username}`,
+    user: { id: 1, username, nickname: '紫罗兰' }
+  })
 })

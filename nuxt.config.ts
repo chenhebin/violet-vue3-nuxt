@@ -15,8 +15,9 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/scripts'
   ],
-  // 常量登记册目录（键名/事件名）：加入 auto-import，调用点零 import 引用
-  imports: { dirs: ['constants'] },
+  // 常量登记册目录（键名/事件名）：加入 auto-import，调用点零 import 引用；
+  // composables 域文件夹（animation/ 等）经各自 index.ts 再导出收拢，新域建夹即生效
+  imports: { dirs: ['constants', 'composables/*/index.ts'] },
   css: ['~/assets/css/main.css'],
   // shadcn-vue 组件注册：Ui 前缀（门牌号式，与 BusinessCommonDeviceView 命名同族），代码拷贝进 app/components/ui
   shadcn: {

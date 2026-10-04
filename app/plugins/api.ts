@@ -11,9 +11,12 @@ export default defineNuxtPlugin({
   name: 'api',
   setup() {
     const nuxtApp = useNuxtApp()
+    // secure 随实际协议：仅 https 下开启（dev 的 http 下设 secure 会被浏览器静默丢 cookie）
+    const secure = useRequestURL().protocol === 'https:'
     const tokenCookie = useCookie<string | null>(COOKIE_KEYS.token, {
       maxAge: 60 * 60 * 24 * 7,
-      sameSite: 'lax'
+      sameSite: 'lax',
+      secure
     })
     // 语言环境
     const locale = computed(() => String(nuxtApp.$i18n.locale))

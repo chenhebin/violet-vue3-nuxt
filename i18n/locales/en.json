@@ -2,6 +2,22 @@
   "nav": { "home": "Home", "about": "About" },
   "home": { "title": "Violet Home", "desc": "Violet consumer site skeleton demo page" },
   "about": { "title": "About Us", "desc": "Introduction page of Violet" },
+  "animation": {
+    "title": "Motion Patterns Demo",
+    "desc": "Skeleton demo page for animation effect facades",
+    "heroTitle": "Motion Patterns Demo",
+    "heroDesc": "Each section maps to one effect facade: parallax, pinned section, split text, hero timeline and video player.",
+    "splitTitle": "Split Text useSplitText",
+    "splitText": "This title reveals character by character",
+    "parallaxTitle": "Parallax useParallax",
+    "parallaxDesc": "Background and foreground move at different speeds while scrolling",
+    "pinTitle": "Pinned Section usePinnedSection",
+    "pinStep1": "Step 1: this section pins to the viewport",
+    "pinStep2": "Step 2: content switches as you scroll",
+    "pinStep3": "Step 3: scrolling finishes and releases",
+    "videoTitle": "Video Player BasicCommonVideoPlayer",
+    "videoDesc": "Plays when in view, pauses when out"
+  },
   "login": {
     "title": "Sign In",
     "desc": "Violet login demo",
@@ -24,6 +40,9 @@
     "simulateExpired": "Simulate token expiry"
   },
   "error": {
+    "notFound": "Page Not Found",
+    "desc": "The page or service is temporarily unavailable",
+    "back": "Back to Home",
     "network": "Network error, please retry later",
     "http": "Service unavailable, please retry later",
     "1001": "Incorrect username or password",
