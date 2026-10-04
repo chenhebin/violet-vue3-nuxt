@@ -46,12 +46,12 @@ async function submit() {
 
 <style scoped>
 .m-login h1 { font-size: 20px; margin: 0 0 8px; }
-.hint { color: var(--v-muted); font-size: 12px; margin: 0; }
+.hint { color: var(--muted-foreground); font-size: 12px; margin: 0; }
 .form { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
 .field { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
-.field input, .field select { padding: 8px; border: 1px solid #ddd; border-radius: var(--v-radius); font: inherit; }
+.field input, .field select { padding: 8px; border: 1px solid #ddd; border-radius: var(--radius); font: inherit; }
 .field-error { color: #d63031; font-size: 12px; }
-.banner-error { color: #d63031; font-size: 12px; background: #ffecec; border-radius: var(--v-radius); padding: 6px 10px; }
-.form button { padding: 10px; border: none; border-radius: var(--v-radius); background: var(--v-primary); color: #fff; font: inherit; }
+.banner-error { color: #d63031; font-size: 12px; background: #ffecec; border-radius: var(--radius); padding: 6px 10px; }
+.form button { padding: 10px; border: none; border-radius: var(--radius); background: var(--primary); color: #fff; font: inherit; }
 .form button:disabled { opacity: 0.6; }
 </style>

@@ -9,7 +9,7 @@
  *    修改 COOKIE_KEYS.locale 必须同步修改 nuxt.config（配置处已留对应注释）
  */
 
-// auth 域的状态键 
+// auth 域的状态键
 export const AUTH_STATE_KEYS = {
   /** 登录瞬间的用户快照；页面级会话数据以 AsyncOutcome 为准（见 useAuth 注释） */
   user: 'auth:user',

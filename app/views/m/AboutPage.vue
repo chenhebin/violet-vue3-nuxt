@@ -13,5 +13,5 @@ const { t } = useLocale()
 <style scoped>
 .m-about { display: flex; flex-direction: column; gap: 8px; }
 .m-about h1 { font-size: 20px; margin: 0; }
-.m-about p { margin: 0; font-size: 14px; color: var(--v-muted); }
+.m-about p { margin: 0; font-size: 14px; color: var(--muted-foreground); }
 </style>

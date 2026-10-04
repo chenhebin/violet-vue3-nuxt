@@ -38,7 +38,8 @@ async function submit() {
           <option v-for="option in sceneOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
         </select>
       </label>
-      <button type="submit" :disabled="pending">{{ pending ? t('login.pending') : t('login.submit') }}</button>
+      <!-- rounded-lg = var(--radius) = 8px：shadcn 按钮 geom 是 rounded-md(--radius-2px)，试点要求与旧版圆角等值 -->
+      <UiButton type="submit" class="rounded-lg" :disabled="pending">{{ pending ? t('login.pending') : t('login.submit') }}</UiButton>
       <p v-if="bannerError" class="banner-error">{{ bannerError }}</p>
     </form>
   </section>
@@ -46,12 +47,10 @@ async function submit() {
 
 <style scoped>
 .login-page { max-width: 360px; }
-.hint { color: var(--v-muted); font-size: 13px; }
+.hint { color: var(--muted-foreground); font-size: 13px; }
 .form { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
 .field { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
-.field input, .field select { padding: 8px 10px; border: 1px solid #ddd; border-radius: var(--v-radius); font: inherit; }
+.field input, .field select { padding: 8px 10px; border: 1px solid #ddd; border-radius: var(--radius); font: inherit; }
 .field-error { color: #d63031; font-size: 12px; }
-.banner-error { color: #d63031; font-size: 13px; background: #ffecec; border-radius: var(--v-radius); padding: 8px 12px; }
-.form button { padding: 10px; border: none; border-radius: var(--v-radius); background: var(--v-primary); color: #fff; font: inherit; cursor: pointer; }
-.form button:disabled { opacity: 0.6; cursor: default; }
+.banner-error { color: #d63031; font-size: 13px; background: #ffecec; border-radius: var(--radius); padding: 8px 12px; }
 </style>

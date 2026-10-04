@@ -1,0 +1,51 @@
+/*
+ * 设计 token 登记册（唯一样式出处）
+ * - 制度：新增 token 先登记再使用；只登记有消费方的 token，设计未定的不预登记
+ * - 等值迁移自旧 --v-* 体系：--background←--v-bg(#ffffff)  --foreground←--v-text(#1a1a1a)
+ *   --primary←--v-primary(#6c5ce7)  --muted-foreground←--v-muted(#8a8a8a)
+ *   --radius←--v-radius(8px)  --container-page←--v-max-width(1080px)
+ * - 消费方速查：站点样式(background/foreground/primary/muted-foreground/radius/container-page)
+ *   base.css(border/ring)  ui/button 变体(secondary/accent/destructive/input + 前述)
+ * - 显式决策：全站 focus ring 统一为 --ring 半透明（shadcn 基座行为）
+ * - 未来组件接入时按需补登记：Dialog/Popover→card/popover 系列；图表→chart-1..5；
+ *   侧边栏→sidebar 系列；暗色模式→恢复 .dark 块（shadcn neutral 色板）
+ */
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --primary: #6c5ce7;
+  --primary-foreground: #ffffff;
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted-foreground: #8a8a8a;
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --container-page: 67.5rem;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}

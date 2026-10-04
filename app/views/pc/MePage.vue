@@ -28,6 +28,6 @@ const { data: session, pending } = await useAsyncData(`auth:me:${scene}`, () => 
 
 <style scoped>
 .me-page { display: flex; flex-direction: column; gap: 10px; }
-.me-page button { padding: 8px 16px; border: none; border-radius: var(--v-radius); background: var(--v-primary); color: #fff; font: inherit; cursor: pointer; align-self: flex-start; }
-.banner-error { color: #d63031; background: #ffecec; border-radius: var(--v-radius); padding: 8px 12px; }
+.me-page button { padding: 8px 16px; border: none; border-radius: var(--radius); background: var(--primary); color: #fff; font: inherit; cursor: pointer; align-self: flex-start; }
+.banner-error { color: #d63031; background: #ffecec; border-radius: var(--radius); padding: 8px 12px; }
 </style>

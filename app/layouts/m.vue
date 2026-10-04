@@ -18,3 +18,11 @@ const localeLabel = computed(() => (locale.value === 'zh' ? 'English' : '中文'
     </main>
   </div>
 </template>
+
+<style scoped>
+.layout { min-height: 100dvh; display: flex; flex-direction: column; }
+.layout-m .layout-main { width: 100%; padding: 16px; flex: 1; }
+.layout-m { padding-bottom: env(safe-area-inset-bottom); }
+.layout-nav { display: flex; gap: 16px; align-items: center; padding: 12px 24px; border-bottom: 1px solid #eee; }
+.nav-action { background: none; border: none; padding: 0; font: inherit; color: var(--primary); cursor: pointer; }
+</style>

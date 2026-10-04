@@ -30,6 +30,6 @@ const { data: session, pending } = await useAsyncData(`auth:me:${scene}`, () => 
 .m-me { display: flex; flex-direction: column; gap: 8px; }
 .m-me h1 { font-size: 20px; margin: 0; }
 .m-me p { margin: 0; font-size: 14px; }
-.m-me button { padding: 8px 16px; border: none; border-radius: var(--v-radius); background: var(--v-primary); color: #fff; font: inherit; align-self: flex-start; }
-.banner-error { color: #d63031; background: #ffecec; border-radius: var(--v-radius); padding: 6px 10px; }
+.m-me button { padding: 8px 16px; border: none; border-radius: var(--radius); background: var(--primary); color: #fff; font: inherit; align-self: flex-start; }
+.banner-error { color: #d63031; background: #ffecec; border-radius: var(--radius); padding: 6px 10px; }
 </style>

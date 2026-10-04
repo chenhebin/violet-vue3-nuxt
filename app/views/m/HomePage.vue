@@ -16,5 +16,5 @@ const { data } = await useAsyncData('hello', () => api<{ message: string; device
 <style scoped>
 .m-home { display: flex; flex-direction: column; gap: 8px; }
 .m-home h1 { font-size: 20px; margin: 0; }
-.m-home p { margin: 0; font-size: 14px; color: var(--v-muted); }
+.m-home p { margin: 0; font-size: 14px; color: var(--muted-foreground); }
 </style>

@@ -75,4 +75,26 @@ export default withNuxt(
       ]
     }
   }
+  ,
+  {
+    /**
+     * ui 层门禁：components/ui 是业务无感层（shadcn 拷贝制组件），
+     * 禁止依赖 composables/api/services/constants——文案/状态经 props 传入，业务逻辑归 business 组件或 composables。
+     * 已知局限：Nuxt auto-import 绕过 import 检查，ui 层直接调用 useAuth 等需 code review 兜底。
+     */
+    files: ['app/components/ui/**/*.vue', 'app/components/ui/**/*.ts'],
+    rules: {
+      'no-restricted-imports': ['error', {
+        patterns: [{
+          group: [
+            '~/composables/*', '~/api/*', '~/services/*', '~/constants/*',
+            '**/composables/**', '**/api/**', '**/services/**', '**/constants/**'
+          ],
+          message: 'components/ui 是业务无感层：文案/状态经 props 传入；业务逻辑归 business 组件或 composables。'
+        }]
+      }],
+      // cva 变体默认值由 buttonVariants 的 defaultVariants 承担，非 props 默认值（shadcn 生成代码惯例）
+      'vue/require-default-prop': 'off'
+    }
+  }
 )
