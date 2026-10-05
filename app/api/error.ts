@@ -1,16 +1,16 @@
 /**
- * 错误体系运行时模块（传输协议层公共件，非业务域，不套域格子目录）。
+ * 错误体系的运行时部分（传输层公共件，不属于任何业务域，所以不放域格子目录）。
  *
- * 职责边界（三级归属）：
- * - 本文件：错误体系的「运行时产物」——类、转换器、形状级文案映射
- * - shared/types/api.ts：错误体系的「编译时契约」——Kind/Snapshot/Outcome 纯类型
- * - composables/useApi.ts：唯一生产者（拦截器内构造 ApiError，与信封解包同族）
+ * 谁放哪（三级归属）：
+ * - 本文件：能跑的代码——ApiError 类、转换器、形状级文案表
+ * - shared/types/api.ts：纯类型——Kind/Snapshot/Outcome，只有编译时用
+ * - composables/useApi.ts：唯一生产 ApiError 的地方（拦截器里造，和信封解包在一处）
  *
- * 变化预期：将来错误上报（Sentry 位）、traceId 富化在本模块内生长，不搅动传输层。
- * 注：api/ 不在 auto-import 目录——消费方显式 import '~/api/error'（对齐 AUTH_ERROR_I18N 的既有模式）。
+ * 以后做错误上报（Sentry 那类）、给 traceId 加料，都在本文件里长，别去动传输层。
+ * 注意：api/ 目录不在 auto-import 里——用的人要显式 import '~/api/error'（跟 AUTH_ERROR_I18N 的既有模式一致）。
  */
 
-// 全站唯一错误形态：协议层归一化产物，上层只面对它，不接触 FetchError
+// 全站唯一的错误类：协议层归一化后的产物。上层只见它，永远不接触 FetchError
 export class ApiError extends Error {
   readonly kind: ApiErrorKind
   readonly code: number
@@ -24,7 +24,7 @@ export class ApiError extends Error {
   }
 }
 
-// 错误形状 → 全站通用横幅文案 i18n key（穷尽映射：新增 kind 必须补译）
+// 错误形状 → 通用横幅文案的 i18n key。satisfies 保证穷尽：新增 kind 不补译，编译就过不去
 export const API_ERROR_BANNER_I18N = {
   network: 'error.network',
   http: 'error.http',
@@ -33,9 +33,9 @@ export const API_ERROR_BANNER_I18N = {
 } satisfies Record<ApiErrorKind, string>
 
 /**
- * 把「可能抛 ApiError 的异步调用」转换为 AsyncOutcome 数据。
- * 各域 composable 在 useAsyncData 回调里一律经由本函数返回，
- * 禁止各自手写 try/catch 快照（防止形态漂移、漏字段）。
+ * 把「可能抛 ApiError 的异步调用」包成 AsyncOutcome 数据。
+ * 各域 composable 在 useAsyncData 回调里统一走这里，
+ * 不许自己手写 try/catch 拼快照（防止形态走样、漏字段）。
  * @param task 异步调用
  * @returns AsyncOutcome 数据
  */

@@ -1,9 +1,9 @@
 import { createAuthService } from '~/services/auth'
 
 /**
- * auth 域组合根：会话业务的装配点。
- * 只消费传输组合根发放的 $apiClient / $tokenStorage（依赖方向：领域 → 传输抽象，单向），
- * 不创建任何基础设施；其他业务域照此模式建各自的 plugins/<domain>.ts。
+ * auth 域的组合根（装配点）：会话业务在这里组装。
+ * 只用传输组合根发下来的 $apiClient / $tokenStorage（依赖方向：业务域 → 传输的抽象接口，只能这一方向），
+ * 不自己造基础设施；其他业务域照这个模式各建 plugins/<domain>.ts。
  */
 export default defineNuxtPlugin({
   dependsOn: ['api'],

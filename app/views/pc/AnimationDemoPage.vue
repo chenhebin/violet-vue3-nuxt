@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { t } = useLocale()
 
-// 每节一个效果门面：ref 指舞台根，标记元素进舞台（视图永不直连动画供应商）
+// 每一节配一个效果门面：ref 指向该节的舞台根元素，要动效的元素打标记进舞台（视图永远不直接 import 动画库）
 const hero = ref<HTMLElement | null>(null)
 const split = ref<HTMLElement | null>(null)
 const parallax = ref<HTMLElement | null>(null)
@@ -15,19 +15,19 @@ usePinnedSection(pinned)
 
 <template>
   <div class="demo">
-    <!-- ① 进场时间线：挂载即播，不等滚动 -->
+    <!-- ① 进场时间线：页面挂载就播，不用等滚动 -->
     <section ref="hero" class="demo-hero">
       <h1 data-hero>{{ t('animation.heroTitle') }}</h1>
       <p data-hero>{{ t('animation.heroDesc') }}</p>
     </section>
 
-    <!-- ② 逐字入场：滚动到位后逐字浮现 -->
+    <!-- ② 逐字入场：滚动到位后文字一个字一个字浮现 -->
     <section ref="split" class="demo-split">
       <h2>{{ t('animation.splitTitle') }}</h2>
       <p class="split-line" data-split>{{ t('animation.splitText') }}</p>
     </section>
 
-    <!-- ③ 分层视差：背景大振幅、前景小振幅 -->
+    <!-- ③ 分层视差：背景动得多，前景动得少 -->
     <section ref="parallax" class="demo-parallax">
       <h2>{{ t('animation.parallaxTitle') }}</h2>
       <div class="parallax-stage">
@@ -36,7 +36,7 @@ usePinnedSection(pinned)
       </div>
     </section>
 
-    <!-- ④ 钉住叙事：本节钉在视口，三步随滚动切换 -->
+    <!-- ④ 钉住叙事：这一节钉在视口不动，滚动时三步依次切换 -->
     <section ref="pinned" class="demo-pin">
       <h2>{{ t('animation.pinTitle') }}</h2>
       <div class="pin-stage">
@@ -46,7 +46,7 @@ usePinnedSection(pinned)
       </div>
     </section>
 
-    <!-- ⑤ basic 层第二播放器：视口播停 -->
+    <!-- ⑤ basic 层的第二个播放器：进视口播、出视口停 -->
     <section class="demo-video">
       <h2>{{ t('animation.videoTitle') }}</h2>
       <p>{{ t('animation.videoDesc') }}</p>
@@ -59,12 +59,12 @@ usePinnedSection(pinned)
 .demo { display: flex; flex-direction: column; gap: 24px; padding: 24px 0; }
 section { border: 1px solid #eee; border-radius: 8px; padding: 32px; }
 
-/* ③ 视差舞台：overflow hidden 裁掉位移出界的层 */
+/* ③ 视差舞台：overflow hidden 把移出边界的层裁掉 */
 .parallax-stage { position: relative; height: 60vh; overflow: hidden; border-radius: 8px; }
 .parallax-bg { position: absolute; inset: -25% 0; background: radial-gradient(circle at 50% 60%, var(--primary) 0%, transparent 65%); opacity: 0.35; }
 .parallax-fg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 600; }
 
-/* ④ 钉住舞台：步骤叠放是 CSS 职责，切换时序归门面 */
+/* ④ 钉住舞台：三步怎么叠着放是 CSS 的事，什么时机切换哪个由门面管 */
 .pin-stage { position: relative; height: 40vh; }
 .pin-step { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600; }
 

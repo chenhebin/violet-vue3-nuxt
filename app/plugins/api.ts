@@ -1,32 +1,32 @@
 import type { TokenStorage } from '~/services/auth'
 
 /**
- * 传输组合根：拥有「带凭据的网关客户端」。
- * - 凭据机制（cookie ref、Authorization 注头）归本层：transport 在请求时读取
- * - 凭据策略（何时写、何时清）归 auth 域：经 $tokenStorage 抽象操作，transport 不感知
- * - 服务端每请求执行一次 → 凭据天然请求隔离；禁止模块级单例持有本文件产出的任何状态
+ * 传输层的组合根（装配点）：这个文件负责造出「带登录凭据的请求客户端」。
+ * - 凭据的机制（cookie、往请求头塞 Authorization）归这层管：发请求时现读
+ * - 凭据的策略（什么时候写、什么时候清）归 auth 域管：通过 $tokenStorage 这套接口操作，传输层不知道细节
+ * - 服务端每个请求都跑一遍 setup → 凭据天然按请求隔离；不许用模块级单例存这个文件产出的任何状态
  */
 export default defineNuxtPlugin({
   dependsOn: ['i18n:plugin'],
   name: 'api',
   setup() {
     const nuxtApp = useNuxtApp()
-    // secure 随实际协议：仅 https 下开启（dev 的 http 下设 secure 会被浏览器静默丢 cookie）
+    // secure 跟着实际协议走：只有 https 才开（dev 是 http，设了 secure 浏览器会悄悄把 cookie 丢掉）
     const secure = useRequestURL().protocol === 'https:'
     const tokenCookie = useCookie<string | null>(COOKIE_KEYS.token, {
       maxAge: 60 * 60 * 24 * 7,
       sameSite: 'lax',
       secure
     })
-    // 语言环境
+    // 当前语言
     const locale = computed(() => String(nuxtApp.$i18n.locale))
-    // 网关客户端
+    // 请求客户端
     const apiClient = useApi({ token: tokenCookie, locale })
     return {
       provide: {
-        // 网关客户端
+        // 请求客户端
         apiClient,
-        // 凭据存储
+        // 凭据的存取口
         tokenStorage: {
           read: () => tokenCookie.value ?? null,
           write: (token: string) => {

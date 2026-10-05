@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /**
- * 视频播放器（basic 业务无感层）：原生 video 元素 + 视口播停，与 LottiePlayer 同范式
- * （业务无感、动态资产、看不见不渲染帧）——basic 层"每类资产一个播放器"的第二个实例。
- * - muted 默认开：浏览器自动播放策略只放行静音视频，非静音需用户手势（UI 层加开关另立项）
- * - play() 的 catch 为预期路径：自动播放策略拒绝时静默（视频停在首帧，不算错误）
- * - 契约：src/loop/muted/poster 仅挂载期生效，运行期变更需调用方以 :key 重挂载
+ * 视频播放器（basic 层，业务无感）：原生 video 元素加视口播停，跟 LottiePlayer 一个套路
+ * （业务无感、资产动态来、看不见就不渲染帧）——basic 层"一种资产一个播放器"的第二个实例。
+ * - muted 默认开：浏览器自动播放策略只放行静音视频，想出声得用户先点一下（要不要 UI 开关另开话题）
+ * - play() 的 catch 是预期路径：自动播放被策略拒掉时直接忽略（视频停在首帧，这不算错）
+ * - 契约：src/loop/muted/poster 只在挂载那一刻生效，运行期想换值，调用方得用 :key 让它重新挂载
  */
 const props = withDefaults(
   defineProps<{ src: string; loop?: boolean; muted?: boolean; poster?: string }>(),

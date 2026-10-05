@@ -2,12 +2,12 @@ import type { gsap } from 'gsap'
 import type { Ref } from 'vue'
 
 /**
- * 钉住叙事门面：target 钉在视口，内部带 [data-step] 标记的子元素随滚动逐个切换
+ * 钉住叙事门面：把 target 钉在视口上，内部带 [data-step] 标记的子元素随滚动一个个切换
  * （Apple 产品页式 storytelling 的最小骨架）。
- * - pin + scrub 时间线：钉住期间滚动进度驱动"上一步淡出、本步淡入"
- * - 步数决定钉多久（end = (N-1)×100%），每步叠放定位是调用方 CSS 职责
- * - 首步天然可见（不设初始隐藏），其余步骤 gsap.set 预置 autoAlpha:0，防 scrub 前闪现
- * - 降级/context/revert 范式同 useReveal（pin 的解钉同样由 ctx.revert 承担）
+ * - pin + scrub 时间线：钉住期间靠滚动进度驱动"上一步淡出、本步淡入"
+ * - 步数决定钉多久（end = (N-1)×100%），每步叠放定位是调用方 CSS 的活
+ * - 第一步天然可见（不设初始隐藏），其余步骤用 gsap.set 预置 autoAlpha:0，防 scrub 开始前闪现
+ * - 降级/context/revert 范式同 useReveal（解钉也由 ctx.revert 一起干掉）
  */
 export function usePinnedSection(
   target: Ref<HTMLElement | null>,

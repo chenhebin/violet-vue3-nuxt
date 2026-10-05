@@ -2,13 +2,13 @@
 import type { AnimationItem } from 'lottie-web'
 
 /**
- * Lottie 播放器（basic 业务无感层）：文案与数据全经 props，无任何业务/composable 依赖。
- * - 播放器动态 import light 构建（体积约半、无表达式求值——设计侧导出时禁用表达式即可；
- *   需要时换全量 'lottie-web' 一行切换），滚出视口即暂停，C 端看不见不渲染帧
- * - src 为 URL（path）或 animationData 对象二选一，由调用方决定打包内联还是网络加载；
- *   对象 src 会先深拷贝——lottie-web 会就地改写传入对象（__complete 等规整标志），
- *   不克隆会把副作用泄漏回调用方的模块级常量
- * - 契约：src/loop/speed 仅挂载期生效，运行期变更需调用方以 :key 重挂载
+ * Lottie 播放器（basic 层，业务无感）：文案和数据全走 props，不依赖任何业务代码或 composable。
+ * - 播放器是动态 import 进来的 light 构建（体积小一半，不含表达式求值——设计侧导出时别用表达式就行；
+ *   以后要完整版，把 import 换成全量 'lottie-web' 一行搞定）。滚出视口就暂停，看不见就不浪费帧
+ * - src 二选一：传 URL（path）或传 animationData 对象，内联打包还是网络加载由调用方自己定；
+ *   传对象时会先深拷贝一份——lottie-web 会就地改写传进去的对象（比如打上 __complete 这类规整标志），
+ *   不克隆的话这些改动会漏回调用方的模块级常量里
+ * - 契约：src/loop/speed 只在挂载那一刻生效，运行期想换值，调用方得用 :key 让它重新挂载
  */
 const props = withDefaults(defineProps<{ src: string | object; loop?: boolean; speed?: number }>(), {
   loop: true,
@@ -24,7 +24,7 @@ onMounted(async () => {
   const el = container.value
   if (!el) return
 
-  // lottie_light 为 CJS 构建，具名经 Vite 互操作走 default
+  // lottie_light 是老式 CommonJS 打包，import 出来的东西挂在 default 上，所以这里解构 default
   const { default: lottie } = await import('lottie-web/build/player/lottie_light')
   if (disposed) return
 

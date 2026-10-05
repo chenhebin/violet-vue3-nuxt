@@ -1,10 +1,10 @@
 const DEMO_CREDENTIALS = { username: 'violet', password: '123456' }
 
 /**
- * mock 登录接口。scene 开关用于演示各异常分支：
- * - timeout: 挂 30s，让客户端 10s 超时先触发 → network 类错误
+ * mock 登录接口。scene 开关用来演示各条异常路径：
+ * - timeout: 吊 30s，让客户端 10s 的超时先到 → network 类错误
  * - http500: 直接抛 5xx → http 类错误
- * - 密码错误：返回 200 + code 1001 → business 类错误（字段级展示）
+ * - 密码错：返回 200 + code 1001 → business 类错误（字段级展示）
  */
 export default defineEventHandler(async (event) => {
   const scene = String(getQuery(event).scene ?? '')

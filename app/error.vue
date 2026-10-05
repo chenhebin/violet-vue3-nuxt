@@ -4,14 +4,15 @@ import MErrorPage from '~/views/m/ErrorPage.vue'
 import type { NuxtError } from '#app'
 
 /**
- * 全局错误页薄壳（404/500 等）：双模板分发的同款姿势（对照 pages/）。
- * 错误渲染仍走完整 app 与插件链，但设备判定必须在此重算：
- * - nitro 级错误（404 等）经内部 /__nuxt_error 虚拟地址渲染——useRequestURL() 拿到的是
- *   虚拟地址，原始地址嵌在其 ?url= 参数（NuxtError.url 同源）；device.server 插件
- *   读不到 device 查询覆盖，useState 退化为 cookie/UA 结论
- * - app 内部 SSR 错误（渲染期抛错）时请求地址就是原始 URL，但为两分支统一，
- *   在此基于同一 URL 源重算——SSR/客户端两侧取同一地址，避免 pc/m 整树 hydration mismatch
- * 判定算法与 device.server 同源（utils/device.ts 的 resolveDevice），本层只多管输入采集。
+ * 全局错误页的薄壳（404/500 等）：用和 pages/ 一样的双模板分发姿势（按设备挑 pc/m 模板）。
+ * 错误页仍走完整的 app 和插件链，但设备判定必须在这里重算一遍：
+ * - nitro 层的错误（404 等）是经内部 /__nuxt_error 这个虚拟地址渲染的——useRequestURL()
+ *   拿到的是虚拟地址，用户真正访问的地址藏在它的 ?url= 参数里（NuxtError.url 同源）；
+ *   device.server 插件读不到 device 查询覆盖，useState 里退化为 cookie/UA 的结论
+ * - app 内部的 SSR 错误（渲染时抛的错）时请求地址本来就是原始 URL，但为了让两条路统一，
+ *   这里基于同一个 URL 来源重算——SSR/客户端两侧取同一个地址，避免 pc/m 整棵树水合
+ *   （hydration）时对不上
+ * 判定算法和 device.server 是同一份（utils/device.ts 的 resolveDevice），这层只多管输入收集。
  */
 const props = defineProps<{ error: NuxtError }>()
 

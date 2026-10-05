@@ -1,6 +1,6 @@
 /**
- * 页面 SEO 元信息门面：title/description 一次登记，
- * og:* 分享卡片字段同步落齐，调用方不重复填写。
+ * 页面 SEO 元信息门面：title/description 登记一次，
+ * og:* 分享卡片字段顺手一起落齐，调用方不用重复填。
  * @param meta 页面标题与描述
  */
 export function usePageMeta(meta: { title: string; description: string }) {

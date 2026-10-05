@@ -2,13 +2,15 @@ import type { Ref } from 'vue'
 import { ApiError } from '~/api/error'
 
 /**
- * 传输层组合式：网关客户端工厂与取用器。
- * 只做「传输」——动态头注入 + 信封解包 + 错误归一化（错误体系运行时见 ~/api/error.ts）。
- * 业务无关；token / locale 由调用方（组合根）以 Ref 注入，本层不关心其来源，
- * 也不依赖任何需要组件 setup 上下文的 composable（插件中可安全调用）。
+ * 传输层组合式：造一个网关客户端，也负责往外发这个客户端。
+ * 只管"传输"这一件事——每个请求动态塞头、收到响应拆信封、报错统一成一种错误格式
+ * （错误体系运行时在 ~/api/error.ts）。
+ * 跟业务无关；token / locale 由调用方（组合根）用 Ref 传进来，本层不管它们从哪来，
+ * 也不依赖任何需要组件 setup 上下文的 composable（所以在插件里调用也是安全的）。
  * @param options 选项
  * @returns 网关客户端
  */
+
 export function useApi(options?: { token?: Ref<string | null>; locale?: Ref<string> }) {
   const config = useRuntimeConfig()
   const { device } = useDevice()
@@ -48,12 +50,12 @@ export function useApi(options?: { token?: Ref<string | null>; locale?: Ref<stri
   })
 }
 
-/** 取组合根注入的网关客户端（业务代码一律用它，禁止在视图层直接 $fetch——有 lint 门禁） */
+/** 取组合根注入好的网关客户端（业务代码一律用它，别在视图层直接 $fetch——有 lint 门禁拦着） */
 export function useApiClient() {
   return useNuxtApp().$apiClient
 }
 
-/** 信封形状判别（传输内部细节，不出模块） */
+/** 判断响应体是不是信封格式（传输内部细节，不出本模块） */
 function isEnvelope(body: unknown): body is ApiEnvelope {
   return !!body && typeof body === 'object' && 'code' in body && 'data' in body
 }

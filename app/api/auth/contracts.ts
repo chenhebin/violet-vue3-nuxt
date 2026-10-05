@@ -1,8 +1,8 @@
 /**
- * auth 域契约：登录/会话的载荷与返回形态
+ * auth 域契约：登录/会话的入参和返回长什么样
  */
 
-// 登录/会话的载荷
+// 登录/会话的入参
 export interface LoginPayload {
   username: string
   password: string
@@ -21,8 +21,8 @@ export interface LoginResult {
   user: AuthUser
 }
 
-// auth 域业务错误码联合：mock 新增分支时在此扩展，并在 errors.ts 补文案
+// auth 域业务错误码联合。mock 加新分支就在这扩展，同时去 errors.ts 补文案
 export type AuthErrorCode = 1001
 
-// mock 演示开关：'' | 'http500' | 'timeout' | 'expired'，仅登录 demo 使用
+// mock 演示开关：'' | 'http500' | 'timeout' | 'expired'，只有登录 demo 在用
 export type MockScene = '' | 'http500' | 'timeout' | 'expired'

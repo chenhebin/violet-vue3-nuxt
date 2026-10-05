@@ -1,6 +1,6 @@
 /**
- * 受保护路由守卫：无凭据一律跳登录，携带原始目标供登录后回跳（useAuth.login 消费）。
- * SSR 直访与客户端导航都会先过这里（definePageMeta 声明处生效）。
+ * 受保护路由的门卫：没登录一律踢去登录页，并带上原来想去的地址，登录成功后好跳回去（useAuth.login 会用）。
+ * SSR 直接访问和客户端内导航都会先过这里（在 definePageMeta 声明的地方生效）。
  */
 export default defineNuxtRouteMiddleware((to) => {
   const { $authService } = useNuxtApp()

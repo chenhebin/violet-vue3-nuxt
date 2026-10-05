@@ -1,4 +1,4 @@
-/* 全局基线：元素默认值与页面过渡（跨端共享，不含任何分端/组件样式） */
+/* 全局基线：元素默认值和页面过渡（两端共用，不含任何分端/组件样式） */
 
 @layer base {
   * {
@@ -13,6 +13,6 @@
 
 a { color: inherit; text-decoration: none; }
 
-/* 页面切换过渡（Nuxt pageTransition 作用于页面组件包裹层，必须全局） */
+/* 页面切换过渡（Nuxt pageTransition 作用在页面组件的包裹层上，所以必须写全局） */
 .page-enter-active, .page-leave-active { transition: opacity 0.25s ease; }
 .page-enter-from, .page-leave-to { opacity: 0; }

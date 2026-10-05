@@ -1,6 +1,6 @@
 /**
- * 设备形态契约（app + server 共享）：
- * server 端 UA 判定写入、app 端消费（布局选择 / x-v-device 注头），
- * 语义单源，两端永不漂移。
+ * 设备形态契约（app 和 server 共用）：
+ * server 端判 UA 后写入，app 端拿来用（选布局 / 注 x-v-device 头）。
+ * 语义只有这一份，两端永不走样。
  */
 export type Device = 'pc' | 'm'

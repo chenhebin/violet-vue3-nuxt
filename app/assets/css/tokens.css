@@ -1,13 +1,13 @@
 /*
- * 设计 token 登记册（唯一样式出处）
- * - 制度：新增 token 先登记再使用；只登记有消费方的 token，设计未定的不预登记
- * - 等值迁移自旧 --v-* 体系：--background←--v-bg(#ffffff)  --foreground←--v-text(#1a1a1a)
+ * 设计 token 登记册（全站唯一样式出处）
+ * - 制度：新 token 先登记再使用；只登记有人用的，设计没定下来的不预先登记
+ * - 数值从旧 --v-* 体系原值搬来：--background←--v-bg(#ffffff)  --foreground←--v-text(#1a1a1a)
  *   --primary←--v-primary(#6c5ce7)  --muted-foreground←--v-muted(#8a8a8a)
  *   --radius←--v-radius(8px)  --container-page←--v-max-width(1080px)
- * - 消费方速查：站点样式(background/foreground/primary/muted-foreground/radius/container-page)
- *   base.css(border/ring)  ui/button 变体(secondary/accent/destructive/input + 前述)
- * - 显式决策：全站 focus ring 统一为 --ring 半透明（shadcn 基座行为）
- * - 未来组件接入时按需补登记：Dialog/Popover→card/popover 系列；图表→chart-1..5；
+ * - 谁在用（速查）：站点样式(background/foreground/primary/muted-foreground/radius/container-page)
+ *   base.css(border/ring)  ui/button 变体(secondary/accent/destructive/input + 前面那些)
+ * - 明确决定过：全站 focus ring 统一用 --ring 半透明（shadcn 基座的行为）
+ * - 以后组件进来时按需补登记：Dialog/Popover→card/popover 系列；图表→chart-1..5；
  *   侧边栏→sidebar 系列；暗色模式→恢复 .dark 块（shadcn neutral 色板）
  */
 @custom-variant dark (&:is(.dark *));

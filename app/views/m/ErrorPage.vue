@@ -6,7 +6,7 @@ const { t } = useLocale()
 const is404 = computed(() => props.error.statusCode === 404)
 usePageMeta({ title: is404.value ? t('error.notFound') : t('error.http'), description: t('error.desc') })
 
-/** 返回首页并清除错误状态（错误页不出现在历史栈） */
+/** 回首页，顺手清掉错误状态（错误页不留进历史栈） */
 function backHome() {
   clearError({ redirect: '/' })
 }

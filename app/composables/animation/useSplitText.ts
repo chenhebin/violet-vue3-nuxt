@@ -3,11 +3,11 @@ import type { gsap } from 'gsap'
 import type { Ref } from 'vue'
 
 /**
- * 逐字/逐词入场门面：target 内带 [data-split] 标记的元素被 SplitText 拆解后
- * 按 stagger 逐个浮现（大牌官网标题式入场）。
- * - 拆分粒度 by: 'chars'（逐字）| 'words'（逐词，中文长句推荐，避免字海）
- * - 全站系统字体栈（字体模块全 provider 已禁），无 webfont 迟到导致的拆分回流问题
- * - SplitText 实例不属 gsap.context 管辖：单独收集，卸载时逐个 revert() 还原原始文本节点
+ * 逐字/逐词入场门面：target 内带 [data-split] 标记的元素被 SplitText 拆开后
+ * 按 stagger 一个个浮现（大牌官网标题式入场）。
+ * - 拆分粒度 by: 'chars'（逐字）| 'words'（逐词，中文长句推荐，不然字太多太碎）
+ * - 全站走系统字体栈（字体模块所有 provider 都禁了），没有 webfont 迟到导致的拆分回流问题
+ * - SplitText 实例不归 gsap.context 管：单独收集，卸载时逐个 revert() 把原始文本节点还原
  * - 降级/context/revert 范式同 useReveal
  */
 export function useSplitText(

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { t } = useLocale()
 
-// m 端示范取轻量子集（触摸端无 Lenis 平滑为既定策略，门面照常可用）
+// m 端只示范轻量子集（触摸端不开 Lenis 平滑是定好的策略，但门面照常能用在 m 端）
 const hero = ref<HTMLElement | null>(null)
 const split = ref<HTMLElement | null>(null)
 
