@@ -9,11 +9,10 @@
  */
 
 /**
- * Umami 脚本每次发事件前的处理：把 URL 里的 query 剥掉（防 scene/token 这类参数进报表）。挂成脚本属性后所有发送都会过这里
- * @param _type 事件类型（未使用）
- * @param payload 事件数据（包含 URL）
- * @returns 处理后的事件数据（URL 的 query 已被剥掉）
- * */
+ * Umami 每次发事件前把 URL 里的 query 剥掉（防 scene/token 这类参数进报表）。挂成脚本属性后所有发送都会过这里
+ * @param _type 事件类型（未使用，Umami 接口要求占位）
+ * @param payload 待发送的事件数据（含 url，可能被改写）
+ */
 function stripQueryBeforeSend(_type: string, payload: Record<string, unknown>) {
   const url = payload.url
   if (typeof url === 'string' && url) {
@@ -23,9 +22,8 @@ function stripQueryBeforeSend(_type: string, payload: Record<string, unknown>) {
 }
 
 /**
- * Umami 脚本唯一注册处：插件（负责加载脚本）和门面（负责事件上报）必须共用这个工厂——各注册一遍会用各自的选项重建 script 标签，
+ * Umami 脚本唯一注册处：插件（加载脚本）和门面（事件上报）必须共用这个工厂——各注册一遍会用各自的选项重建 script 标签，
  * 后到的把先到的属性覆盖掉（实测 beforeSend 会被冲没）。没配 websiteId 时返回 null，整栈静默
- * @returns Umami 脚本实例（null 表示未配置）
  */
 export function useUmamiScript() {
   const config = useRuntimeConfig()
@@ -40,18 +38,17 @@ export function useUmamiScript() {
 }
 
 /**
- * 埋点域门面：业务事件统一出口，视图/服务层只面对本层。
- * @returns 业务动作上报函数（track）与会话关联函数（identify）
- * */
+ * 埋点域门面：业务事件统一出口（域级约定见文件头注）
+ */
 export function useTrack() {
   const script = useUmamiScript()
-  const device = useState<Device>(DEVICE_STATE_KEYS.device)
+  const { device } = storeToRefs(useDeviceStore())
   const { $i18n } = useNuxtApp()
 
   /**
    * 业务动作上报：事件名必须传 TRACK_EVENTS 登记册里的常量（漏登记编译不过）；属性里别塞中文/敏感信息
-   * @param event 事件名（从 TRACK_EVENTS 登记册常量中取）
-   * @param data 事件数据（包含事件属性）
+   * @param event 事件名（TRACK_EVENTS 登记册常量）
+   * @param data 事件属性，自动附带 device/locale 维度
    */
   function track(event: TrackEventName, data: Record<string, unknown> = {}) {
     script?.proxy.track(event, { ...data, device: device.value, locale: $i18n.locale.value })
@@ -59,7 +56,7 @@ export function useTrack() {
 
   /**
    * 会话关联（登录成功后调；只传 id，不带 PII）
-   * @param id 会话 ID（一般是用户 ID）
+   * @param id 用户 id
    */
   function identify(id: string) {
     script?.proxy.identify({ id })

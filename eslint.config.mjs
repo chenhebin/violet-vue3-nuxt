@@ -33,6 +33,11 @@ export default withNuxt(
             message: '视图/页面层只允许依赖 composables（域门面）；api/ 与 services/ 仅放行 type 导入。'
           },
           {
+            group: ['~/stores/*'],
+            allowTypeImports: true,
+            message: '视图/页面层不直连 Pinia store：状态消费走 composables 域门面（useAuth/useDevice…），store 编排也发生在门面/服务层。'
+          },
+          {
             group: ['gsap', 'gsap/**', 'lenis', 'lenis/**', 'lottie-web', 'lottie-web/**'],
             message: '动画供应商禁止直连视图层：滚动显现走 useReveal，动效资产走 LottiePlayer，底层访问走 useAnimation——供应商被隔离在门面与 plugins/animation.client.ts，换引擎只动两处。'
           }
@@ -107,8 +112,8 @@ export default withNuxt(
       'no-restricted-imports': ['error', {
         patterns: [{
           group: [
-            '~/composables/*', '~/api/*', '~/services/*', '~/constants/*',
-            '**/composables/**', '**/api/**', '**/services/**', '**/constants/**',
+            '~/composables/*', '~/api/*', '~/services/*', '~/constants/*', '~/stores/*',
+            '**/composables/**', '**/api/**', '**/services/**', '**/constants/**', '**/stores/**',
             '~/components/business/*', '**/components/business/**'
           ],
           message: 'components/ui 与 components/basic 是业务无感层：文案/状态经 props 传入；业务逻辑归 business 组件或 composables，无感层不得依赖业务层。'

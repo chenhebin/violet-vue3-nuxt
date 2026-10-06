@@ -19,10 +19,10 @@ export interface ApiEnvelope<T = unknown> {
   data: T
 }
 
-/** 错误类别：网络层 / HTTP 状态 / 业务码 / 会话失效。全站唯一的错误形状，哪个域都不许发明第五种 */
+// 错误类别：网络层 / HTTP 状态 / 业务码 / 会话失效。全站唯一的错误形状，哪个域都不许发明第五种
 export type ApiErrorKind = 'network' | 'http' | 'business' | 'auth'
 
-/** ApiError 的跨边界快照：只留可序列化字段（放进 useState/useAsyncData 才安全） */
+// ApiError 的跨边界快照：只留可序列化字段（放进 store/useAsyncData 才安全）
 export interface ApiErrorSnapshot {
   kind: ApiErrorKind
   code: number

@@ -4,7 +4,7 @@
  */
 
 /**
- * 成功信封
+ * 成功信封：包一层 code=0 + 业务数据
  * @param data 业务数据
  */
 export function apiOk<T>(data: T): ApiEnvelope<T> {

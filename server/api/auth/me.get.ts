@@ -1,4 +1,7 @@
-/** mock 会话接口：校验 Bearer token；scene=expired 时强制 401，演示会话过期 */
+/**
+ * mock 会话接口：校验 Bearer token；scene=expired 时强制 401，演示会话过期
+ * @param event 请求事件对象
+ */
 export default defineEventHandler((event) => {
   const scene = String(getQuery(event).scene ?? '')
   const authorization = getHeader(event, 'authorization') ?? ''

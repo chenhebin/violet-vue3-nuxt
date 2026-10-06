@@ -8,6 +8,8 @@ import type { Ref } from 'vue'
  * - 步数决定钉多久（end = (N-1)×100%），每步叠放定位是调用方 CSS 的活
  * - 第一步天然可见（不设初始隐藏），其余步骤用 gsap.set 预置 autoAlpha:0，防 scrub 开始前闪现
  * - 降级/context/revert 范式同 useReveal（解钉也由 ctx.revert 一起干掉）
+ * @param target 要钉住的区段模板 ref（在其内部查找 [data-step] 标记的步骤元素）
+ * @param options 钉住参数（滚动触发起点）
  */
 export function usePinnedSection(
   target: Ref<HTMLElement | null>,

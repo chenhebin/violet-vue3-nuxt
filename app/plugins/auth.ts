@@ -13,7 +13,6 @@ export default defineNuxtPlugin({
     const authService = createAuthService($apiClient, $tokenStorage)
     return {
       provide: {
-        // 会话业务服务
         authService
       }
     }

@@ -5,7 +5,9 @@
 export function useLocale() {
   const { t, locale, setLocale } = useI18n()
 
-  /** 中英互切（i18n cookie 持久化由 @nuxtjs/i18n 接管，我们不用管） */
+  /**
+   * 中英互切（i18n cookie 持久化由 @nuxtjs/i18n 接管，我们不用管）
+   */
   function toggleLocale() {
     setLocale(locale.value === 'zh' ? 'en' : 'zh')
   }

@@ -7,6 +7,8 @@ import type { Ref } from 'vue'
  * - prefers-reduced-motion 命中就直接跳过：元素天然可见、零内联样式（降级判定在组合根，视图层零分支）
  * - gsap.context 收纳全部动画（含 ScrollTrigger），onBeforeUnmount revert() 干掉触发器和内联样式，防 SPA 换页泄漏
  * - target 传模板 ref（显式传，好过自动去查组件根）
+ * @param target 动效舞台的模板 ref（在其内部查找 [data-reveal] 标记元素）
+ * @param options 动画参数（位移/时长/触发起点）
  */
 export function useReveal(
   target: Ref<HTMLElement | null>,

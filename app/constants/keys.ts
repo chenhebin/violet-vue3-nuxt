@@ -9,18 +9,12 @@
  *    所以改 COOKIE_KEYS.locale 必须同步改 nuxt.config（配置那处留了对应注释）
  */
 
-// auth 域的状态键
-export const AUTH_STATE_KEYS = {
-  /** 登录那一刻的用户快照；页面级会话数据以 AsyncOutcome 为准（见 useAuth 注释） */
-  user: 'auth:user',
-  /** 登录动作的错误快照（ApiErrorSnapshot 形态） */
-  error: 'auth:error'
-} as const
-
-// 设备域的状态键（全局横切的东西，服务端 device 插件是唯一写入方）
-export const DEVICE_STATE_KEYS = {
-  // 当前设备形态：'pc' | 'm'
-  device: 'device:current'
+// Pinia 域 store 的 id 登记册：一域一 store，id 即域名
+export const PINIA_STORE_IDS = {
+  // auth 域：登录态快照、登录动作错误、记住的用户名（localStorage 持久化 pick）
+  auth: 'auth',
+  // device 域：设备结论（唯一写入方是 plugins/device.server.ts；持久化走 v_device cookie，store 不落 localStorage）
+  device: 'device'
 } as const
 
 // Cookie 键登记

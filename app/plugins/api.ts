@@ -7,7 +7,9 @@ import type { TokenStorage } from '~/services/auth'
  * - 服务端每个请求都跑一遍 setup → 凭据天然按请求隔离；不许用模块级单例存这个文件产出的任何状态
  */
 export default defineNuxtPlugin({
-  dependsOn: ['i18n:plugin'],
+  // pinia 要排前：本插件的 useApi→useDevice→useTrack 链会实例化 device store（依赖 payload 已水合的 pinia 状态）；
+  // 目前靠"模块插件先于 app 插件"的插入序碰巧成立，这里显式声明成契约
+  dependsOn: ['pinia', 'i18n:plugin'],
   name: 'api',
   setup() {
     const nuxtApp = useNuxtApp()
@@ -18,15 +20,12 @@ export default defineNuxtPlugin({
       sameSite: 'lax',
       secure
     })
-    // 当前语言
     const locale = computed(() => String(nuxtApp.$i18n.locale))
-    // 请求客户端
     const apiClient = useApi({ token: tokenCookie, locale })
     return {
       provide: {
-        // 请求客户端
         apiClient,
-        // 凭据的存取口
+        // 凭据的存取口（TokenStorage 端口）
         tokenStorage: {
           read: () => tokenCookie.value ?? null,
           write: (token: string) => {

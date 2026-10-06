@@ -8,6 +8,8 @@ import type { Ref } from 'vue'
  * - 要精细编排（重叠/错拍/多阶段）就扩展 timeline 位置参数，范式不变：
  *   ctx = gsap.context(() => { const tl = gsap.timeline(); tl.from(...).to(..., '<0.2') })
  * - 降级/context/revert 范式同 useReveal
+ * @param target 动效舞台的模板 ref（在其内部查找 [data-hero] 标记元素）
+ * @param options 时间线参数（位移/错拍/时长/整体延迟）
  */
 export function useHeroTimeline(
   target: Ref<HTMLElement | null>,

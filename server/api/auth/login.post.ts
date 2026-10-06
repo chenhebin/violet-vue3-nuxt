@@ -5,6 +5,7 @@ const DEMO_CREDENTIALS = { username: 'violet', password: '123456' }
  * - timeout: 吊 30s，让客户端 10s 的超时先到 → network 类错误
  * - http500: 直接抛 5xx → http 类错误
  * - 密码错：返回 200 + code 1001 → business 类错误（字段级展示）
+ * @param event 请求事件对象
  */
 export default defineEventHandler(async (event) => {
   const scene = String(getQuery(event).scene ?? '')

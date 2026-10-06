@@ -13,11 +13,17 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxt/image',
     '@nuxt/fonts',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     '@nuxt/scripts'
   ],
   // 常量登记册（统一放键名/事件名的地方）：加进 auto-import，调用处不用写 import；
-  // composables 的域文件夹（animation/ 等）经各自的 index.ts 再导出收拢，新建一个域文件夹就自动生效
-  imports: { dirs: ['constants', 'composables/*/index.ts'] },
+  // composables 的域文件夹（animation/ 等）经各自的 index.ts 再导出收拢，新建一个域文件夹就自动生效；
+  // stores 是 Pinia 域 store（app/stores/<域>.ts），经项目原生 auto-import 暴露（不依赖 @pinia/nuxt 的 storesDirs 默认值）
+  imports: { dirs: ['constants', 'composables/*/index.ts', 'stores'] },
+  // Pinia 持久化全局键模板：localStorage 键形如 violet:auth（%id 即 store id，登记在 PINIA_STORE_IDS）。
+  // 不设全局 storage：默认是 cookies，本项目的规矩是每个要持久化的 store 显式声明 storage: piniaPluginPersistedstate.localStorage()
+  piniaPluginPersistedstate: { key: 'violet:%id' },
   css: ['~/assets/css/main.css'],
   // shadcn-vue 组件注册：Ui 前缀（像门牌号，和 BusinessCommonDeviceView 命名一路的），代码拷贝进 app/components/ui
   shadcn: {

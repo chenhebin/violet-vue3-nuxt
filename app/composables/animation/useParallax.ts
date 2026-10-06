@@ -9,6 +9,8 @@ import type { Ref } from 'vue'
  *   分层视差 = 同一个舞台里背景层给大振幅、前景层给小振幅
  * - 默认行程：元素顶进视口底（top bottom）开始 → 元素底出视口顶（bottom top）结束
  * - 降级/context/revert 范式同 useReveal（见那个文件的头注）
+ * @param target 动效舞台的模板 ref（在其内部查找 [data-parallax] 标记元素）
+ * @param options 视差参数（默认振幅/行程起止点）
  */
 export function useParallax(
   target: Ref<HTMLElement | null>,

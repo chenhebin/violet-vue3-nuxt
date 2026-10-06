@@ -23,6 +23,7 @@
     "desc": "Violet 登录示例",
     "username": "用户名",
     "password": "密码",
+    "remember": "记住用户名",
     "submit": "登录",
     "pending": "登录中…",
     "hint": "演示账号：violet / 123456",

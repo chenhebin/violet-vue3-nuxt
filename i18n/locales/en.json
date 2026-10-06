@@ -23,6 +23,7 @@
     "desc": "Violet login demo",
     "username": "Username",
     "password": "Password",
+    "remember": "Remember username",
     "submit": "Sign In",
     "pending": "Signing in…",
     "hint": "Demo account: violet / 123456",

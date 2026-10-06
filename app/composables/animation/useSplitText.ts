@@ -9,6 +9,8 @@ import type { Ref } from 'vue'
  * - 全站走系统字体栈（字体模块所有 provider 都禁了），没有 webfont 迟到导致的拆分回流问题
  * - SplitText 实例不归 gsap.context 管：单独收集，卸载时逐个 revert() 把原始文本节点还原
  * - 降级/context/revert 范式同 useReveal
+ * @param target 动效舞台的模板 ref（在其内部查找 [data-split] 标记元素）
+ * @param options 拆分与入场参数（粒度/位移/错拍/时长/触发起点）
  */
 export function useSplitText(
   target: Ref<HTMLElement | null>,

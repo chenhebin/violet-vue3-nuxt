@@ -6,11 +6,10 @@ import type { AuthUser, LoginPayload, LoginResult, MockScene } from './contracts
  */
 
 /**
- * 登录/会话
- * @param client 网关客户端
- * @param payload 登录/会话的入参
- * @param scene 模拟场景
- * @returns 登录/会话的返回形态
+ * 登录；scene 非空时作为 query 传给 mock 接口模拟异常
+ * @param client 组合根造好的请求客户端
+ * @param payload 登录表单载荷
+ * @param scene mock 异常场景（空串则不传）
  */
 export function postLogin(client: ApiClient, payload: LoginPayload, scene: MockScene = '') {
   return client<LoginResult>('/auth/login', {
@@ -22,18 +21,16 @@ export function postLogin(client: ApiClient, payload: LoginPayload, scene: MockS
 
 /**
  * 拉当前登录用户信息
- * @param client 网关客户端
- * @param scene 模拟场景
- * @returns 当前登录用户信息的形态
+ * @param client 组合根造好的请求客户端
+ * @param scene mock 异常场景（空串则不传）
  */
 export function getMe(client: ApiClient, scene: MockScene = '') {
   return client<AuthUser>('/auth/me', scene ? { query: { scene } } : undefined)
 }
 
 /**
- * 退出登录/会话
- * @param client 网关客户端
- * @returns 退出登录/会话的返回形态
+ * 退出登录
+ * @param client 组合根造好的请求客户端
  */
 export function postLogout(client: ApiClient) {
   return client<null>('/auth/logout', { method: 'POST' })
