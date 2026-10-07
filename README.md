@@ -57,6 +57,8 @@ npm install      # postinstall 自动跑 nuxt prepare
 npm run dev      # 开发服务器，默认 http://localhost:3000
 ```
 
+测试：`npm run test`（Vitest 纯逻辑层）、`npm run test:e2e`（Playwright 关键旅程，首次先 `npx playwright install chromium`）；分层与放置约定见 `docs/conventions/testing.md`。
+
 起来后用演示账号登录：`violet / 123456`（mock 登录接口写死的，见 `server/api/auth/login.post.ts`）。
 
 **埋点（可选）**：不配也能跑，整个埋点栈静默 no-op，业务调用处零防御。

@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # 四连门禁（顺序与 docs/conventions/quality.md 军规 1 一致）
+      - run: npm run typecheck
+      - run: npx eslint .
+      - run: npm run test
+      - run: npm run build
+
+      # E2E：关键旅程回归（webServer 由 playwright.config.ts 用 preview 自管，依赖上一步 build 产物）
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

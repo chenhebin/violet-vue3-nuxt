@@ -4,7 +4,7 @@
 
 ## 军规
 
-1. 提交前三连，0 error 才算过：`npm run typecheck` → `npx eslint .` → `npm run build`（package.json 没配 lint script，eslint 直接 npx）。环境必须 Node 22（`.nvmrc` 钉版本，先 `nvm use`）——低版本 Node 会报 `node:util does not provide an export named 'styleText'` 这类怪错 `[Review]`
+1. 提交前四连，0 error 才算过：`npm run typecheck` → `npx eslint .` → `npm run test` → `npm run build`（package.json 没配 lint script，eslint 直接 npx）。环境必须 Node 22（`.nvmrc` 钉版本，先 `nvm use`）——低版本 Node 会报 `node:util does not provide an export named 'styleText'` 这类怪错。E2E 单列：`npm run test:e2e`（需先 `npx playwright install chromium`，规范见 [testing.md](testing.md)）`[Review]`
 2. 提交信息走 conventional commits：`feat:` / `fix:` / `docs:` / `refactor:` / `chore:` / `perf:` 前缀，一句话说清改动（参照 git log 现有风格，中文描述可）`[Review]`
 3. eslint 门禁块是硬约束；要放宽 / 新增门禁必须在提交说明里给理由 `[Review]`
 4. auto-import 绕过 import 检查是已知盲区（ui / basic 直调 useAuth、视图直调 gsap 这类），靠 code review 兜底 `[Review]`
@@ -29,10 +29,12 @@
 
 ## 手动验证清单
 
-- **登录流**：错误密码看字段文案；正确密码跳 `/me`，Umami 落 `login_success`；登录页 `scene` 下拉模拟服务端 500 / 请求超时；`/me?scene=expired` 模拟会话过期
-- **动效**：`/about` 看滚动显现和 Lottie；`/animation` 看全部效果门面
-- **双端**：导航栏切「手机版 / 电脑版」看双模板分发
-- **降级**：DevTools 开「Emulate CSS prefers-reduced-motion」刷新，确认全站降级为原生滚动零动画
+即席验证由「任何具备浏览器能力的执行者」（人或 agent）照此执行，截图与结论追加到票。已被 e2e 固化覆盖的项标注如下：
+
+- **登录流**：错误密码看字段文案；正确密码跳 `/me`，Umami 落 `login_success`；登录页 `scene` 下拉模拟服务端 500 / 请求超时；`/me?scene=expired` 模拟会话过期（`e2e/login.spec.ts` 覆盖：错密码字段文案、正确密码跳转、http500 横幅、未登录踢回；Umami 落数与 timeout 场景仍需人验）
+- **动效**：`/about` 看滚动显现和 Lottie；`/animation` 看全部效果门面（仍需人验/即席验证）
+- **双端**：导航栏切「手机版 / 电脑版」看双模板分发（`e2e/login.spec.ts` 覆盖 m 端模板渲染断言；切换交互仍需人验）
+- **降级**：DevTools 开「Emulate CSS prefers-reduced-motion」刷新，确认全站降级为原生滚动零动画（仍需人验）
 
 ## 提交信息风格
 
