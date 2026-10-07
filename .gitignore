@@ -8,3 +8,4 @@ dist
 .data
 *.log
 .DS_Store
+.zcode
