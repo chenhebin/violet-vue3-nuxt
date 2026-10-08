@@ -14,7 +14,7 @@ Status: resolved
 6. Given `fetchMe` 抛 `ApiError('auth')`，When `fetchMe`，Then 先清凭据再原样上抛
 7. Given `fetchMe` 抛非 auth 类 ApiError（http），When `fetchMe`，Then 不清凭据且上抛
 
-Reviewed: 待人工补审（审过后在本行补日期与署名）
+Reviewed: 2026-10-07（用户确认无误）
 
 ## Comments
 

@@ -31,9 +31,9 @@
 
 即席验证由「任何具备浏览器能力的执行者」（人或 agent）照此执行，截图与结论追加到票。已被 e2e 固化覆盖的项标注如下：
 
-- **登录流**：错误密码看字段文案；正确密码跳 `/me`，Umami 落 `login_success`；登录页 `scene` 下拉模拟服务端 500 / 请求超时；`/me?scene=expired` 模拟会话过期（`e2e/login.spec.ts` 覆盖：错密码字段文案、正确密码跳转、http500 横幅、未登录踢回；Umami 落数与 timeout 场景仍需人验）
+- **登录流**：错误密码看字段文案；正确密码跳 `/me`，Umami 落 `login_success`；登录页 `scene` 下拉模拟服务端 500 / 请求超时；`/me?scene=expired` 模拟会话过期（`e2e/auth/login.spec.ts` 覆盖：错密码字段文案、正确密码跳转、http500 横幅、未登录踢回；Umami 落数与 timeout 场景仍需人验）
 - **动效**：`/about` 看滚动显现和 Lottie；`/animation` 看全部效果门面（仍需人验/即席验证）
-- **双端**：导航栏切「手机版 / 电脑版」看双模板分发（`e2e/login.spec.ts` 覆盖 m 端模板渲染断言；切换交互仍需人验）
+- **双端**：导航栏切「手机版 / 电脑版」看双模板分发（`e2e/device/dual-template.spec.ts` 覆盖 m 端模板渲染断言；切换交互仍需人验）
 - **降级**：DevTools 开「Emulate CSS prefers-reduced-motion」刷新，确认全站降级为原生滚动零动画（仍需人验）
 
 ## 提交信息风格

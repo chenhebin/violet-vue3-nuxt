@@ -4,7 +4,7 @@
 
 ## 军规
 
-1. 分层照金字塔：纯逻辑 Vitest（`tests/unit/`）→ 组件 @vue/test-utils + @nuxt/test-utils（**按需启用**，见下）→ E2E Playwright（`e2e/`）；E2E 只固化关键旅程 `[Review]`
+1. 分层照金字塔：纯逻辑 Vitest（`tests/unit/`）→ 组件 @vue/test-utils + @nuxt/test-utils（**按需启用**，见下）→ E2E Playwright（`e2e/<域>/<旅程>.spec.ts`，域与 app 域格子对齐——auth / device / hello…；跨域冒烟进 `e2e/smoke/`）；E2E 只固化关键旅程 `[Review]`
 2. 关键旅程判定：坏了就是事故的流（登录、受保护路由、双模板分发）；新旅程入册需在票里说明理由 `[Review]`
 3. 追溯：spec 文件头注释 `// Ticket: .scratch/<...>/issues/NN.md` 挂票号；**用例名必须自解释**（Given-When-Then 式），票号只是溯源加分项——票被清理链条不断，用例名本身就是持久文档 `[Review]`
 4. bug 修复必先有失败复现测试（对应层），红 → 修 → 绿，测试留存为回归资产 `[Review]`
@@ -20,7 +20,7 @@
 |---|---|---|---|
 | 纯逻辑（services / utils） | Vitest | `tests/unit/`（镜像 app 结构） | 业务规则、错误归一形状、AsyncOutcome——DI 设计（`createAuthService(client, tokens)` 桩替即测）在这里兑现 |
 | 组件 / composables / store | @vue/test-utils + @nuxt/test-utils | `tests/component/`（按需启用） | 组件渲染、门面与 store 交互（依赖 Nuxt 环境的都归这层） |
-| 浏览器 E2E | Playwright | `e2e/` | 关键旅程：登录流、受保护路由、双模板分发 |
+| 浏览器 E2E | Playwright | `e2e/<域>/<旅程>.spec.ts`（域对齐 app 域格子，跨域冒烟进 `e2e/smoke/`） | 关键旅程：登录流、受保护路由、双模板分发 |
 
 ## 命令速查
 

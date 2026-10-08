@@ -11,7 +11,7 @@ Status: resolved
 3. Given 仅新增测试相关文件，When 跑四连门禁（typecheck → eslint → test → build），Then 与改动前一致全绿
 4. Then `test-results/`、`playwright-report/` 已被 `.gitignore` 忽略
 
-Reviewed: 待人工补审（审过后在本行补日期与署名）
+Reviewed: 2026-10-07（用户确认无误）
 
 ## Comments
 
