@@ -27,7 +27,8 @@ export default defineEventHandler(async (event) => {
     return apiFail(1001, 'username or password mismatch')
   }
 
-  return apiOk({
+  // 返回形态契约见 shared/types/auth.ts（LoginResult）：apiOk 泛型标注后，server 与 app 契约漂移在 typecheck 就红
+  return apiOk<LoginResult>({
     token: `v-mock-token-${username}`,
     user: { id: 1, username, nickname: '紫罗兰' }
   })

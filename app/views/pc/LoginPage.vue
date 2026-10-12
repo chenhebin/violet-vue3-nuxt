@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { MockScene } from '~/api/auth'
 const { t } = useLocale()
+const router = useRouter()
+const route = useRoute()
 const { login, pending, fieldError, bannerError, rememberedUsername, setRememberedUsername } = useAuth()
 
 const username = ref('violet')
@@ -24,7 +25,10 @@ const sceneOptions: { value: MockScene; label: string }[] = [
 async function submit() {
   // 意图即记录（不依赖登录成败）：勾了就记当前用户名，没勾就清空
   setRememberedUsername(remember.value ? username.value : '')
-  await login({ username: username.value, password: password.value }, scene.value)
+  // scene 演示开关经 URL query 进系统：先把选中的场景写进 query（保留 redirect 等既有参数），
+  // 传输层（plugins/api.ts）按 query 统一注入 ?scene=，登录调用本身不再带场景
+  if (scene.value) await router.replace({ query: { ...route.query, scene: scene.value } })
+  await login({ username: username.value, password: password.value })
 }
 </script>
 
@@ -64,8 +68,8 @@ async function submit() {
 .hint { color: var(--muted-foreground); font-size: 13px; }
 .form { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
 .field { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
-.field input, .field select { padding: 8px 10px; border: 1px solid #ddd; border-radius: var(--radius); font: inherit; }
-.field-error { color: #d63031; font-size: 12px; }
-.banner-error { color: #d63031; font-size: 13px; background: #ffecec; border-radius: var(--radius); padding: 8px 12px; }
+.field input, .field select { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); font: inherit; }
+.field-error { color: var(--destructive); font-size: 12px; }
+.banner-error { color: var(--destructive); font-size: 13px; background: var(--destructive-soft); border-radius: var(--radius); padding: 8px 12px; }
 .field.remember { flex-direction: row; align-items: center; gap: 6px; }
 </style>

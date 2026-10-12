@@ -11,5 +11,6 @@ export default defineEventHandler((event) => {
     throw createError({ statusCode: 401, statusMessage: 'token invalid or expired' })
   }
 
-  return apiOk({ id: 1, username: token.replace('v-mock-token-', ''), nickname: '紫罗兰' })
+  // 返回形态契约见 shared/types/auth.ts（AuthUser）：apiOk 泛型标注后，server 与 app 契约漂移在 typecheck 就红
+  return apiOk<AuthUser>({ id: 1, username: token.replace('v-mock-token-', ''), nickname: '紫罗兰' })
 })

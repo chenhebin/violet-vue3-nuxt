@@ -19,7 +19,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   // 效果门面要用到的官方插件都统一在这注册（3.13 之后全免费）；加新插件就在这加一行
   gsap.registerPlugin(ScrollTrigger, SplitText)
 
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const reduced = prefersReducedMotion()
 
   let lenis: Lenis | null = null
   if (!reduced) {

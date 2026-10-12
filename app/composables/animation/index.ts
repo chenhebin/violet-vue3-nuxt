@@ -7,7 +7,7 @@
  * - 单文件域（比如 useAuth）留在顶层；跨域横切门面（useApi/useTrack/useDevice/useLocale/usePageMeta）永远顶层
  * - 不为"将来可能有"预建空域文件夹（跟登记册制度一个道理）
  *
- * 新效果门面照 useReveal 抄就行（onMounted 取门面 → reduced 跳过 → gsap.context → revert）。
+ * 新效果门面用 createEffect（生命周期骨架收在那，域内私有不在此再导出），自己只写动画配方（照 useReveal.ts 抄）。
  */
 export * from './useAnimation'
 export * from './useHeroTimeline'

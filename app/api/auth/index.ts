@@ -7,8 +7,10 @@
  * - 类型放哪遵守三级归属（写在 shared/types/api.ts 头部）：
  *   域私有 → contracts.ts；app 分层抽象 → services/types.ts；跨端或 ≥3 个域用 → shared/types/
  *
- * ⚠️ demo 债务：MockScene 是登录演示用的异常模拟开关，已经渗进了 service 签名。
- * 接真实后端时要整体拔掉（连同 service/composable/视图的透传，以及 mock 接口里的 scene 分支）。
+ * ⚠️ demo 债务：MockScene 是登录/会话演示用的异常模拟开关，已收口在传输层——URL query（?scene=）驱动，
+ * 组合根 plugins/api.ts 统一注入，业务签名不带 scene；白名单登记处在 `app/constants/mock.ts`。
+ * 接真实后端时整体拔掉，共 5 处：constants/mock.ts 登记处、plugins/api.ts 注入点、server 的 scene 分支
+ * （login.post.ts / me.get.ts）、LoginPage 下拉、MePage 过期链接。
  */
 export * from './contracts'
 export * from './errors'

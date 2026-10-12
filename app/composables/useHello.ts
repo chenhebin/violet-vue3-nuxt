@@ -1,5 +1,4 @@
 import { getHello } from '~/api/hello'
-import type { HelloResult } from '~/api/hello'
 
 /**
  * hello 域门面：示例问候数据源（包了层 useAsyncData）。

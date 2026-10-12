@@ -6,13 +6,15 @@
  *   --radius←--v-radius(8px)  --container-page←--v-max-width(1080px)
  * - 谁在用（速查）：站点样式(background/foreground/primary/muted-foreground/radius/container-page)
  *   base.css(border/ring)  ui/button 变体(secondary/accent/destructive/input + 前面那些)
+ *   destructive-soft(login/me 错误横幅底)
  * - 明确决定过：全站 focus ring 统一用 --ring 半透明（shadcn 基座的行为）
  * - 以后组件进来时按需补登记：Dialog/Popover→card/popover 系列；图表→chart-1..5；
- *   侧边栏→sidebar 系列；暗色模式→恢复 .dark 块（shadcn neutral 色板）
+ *   侧边栏→sidebar 系列；暗色主题包 → themes/dark.css
  */
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #1a1a1a;
   --primary: #6c5ce7;
@@ -23,6 +25,7 @@
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-soft: #ffecec;
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);

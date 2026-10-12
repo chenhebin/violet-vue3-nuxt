@@ -1,0 +1,24 @@
+/*
+ * 暗色主题包：只覆盖 tokens.css 登记过的语义 token，不造新名、不写样式规则。
+ * - 挂载点：<html data-theme="dark">（plugins/theme.server.ts SSR 直出，零闪屏）
+ * - 值来源：中性灰沿用 shadcn neutral 暗色板；品牌紫 = #6c5ce7(oklch 0.568 0.202 283.1) 同色相提亮到 L=0.74。
+ *   对比度已验证：#9d96ff 于暗底(#0a0a0a) 7.77:1；深字(#171717)于 #9d96ff 上 7.03:1；白字仅 2.55:1 故前景取深字。
+ * - 设计稿到位后只改本文件。
+ */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --primary: #9d96ff;
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-soft: #3c1715;
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}

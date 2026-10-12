@@ -7,11 +7,13 @@ export default defineNuxtPlugin({
     const headers = useRequestHeaders(['user-agent', 'cookie'])
     const url = useRequestURL()
 
-    const cookie = headers.cookie?.match(new RegExp(`(?:^|;\\s*)${COOKIE_KEYS.device}=(pc|m)`))?.[1]
+    const cookieRaw = parseCookie(headers.cookie, COOKIE_KEYS.device)
+    // 白名单在调用侧：cookie 不可信，只认 pc/m
+    const cookieDevice = cookieRaw === 'pc' || cookieRaw === 'm' ? cookieRaw : undefined
     // 结论写进 device store（显式传 nuxtApp.$pinia，不赌当前激活实例）；SSR 侧 pinia 状态由 @pinia/nuxt 自动进 payload 传给客户端
     useDeviceStore(nuxtApp.$pinia).setDevice(resolveDevice({
       queryDevice: url.searchParams.get('device'),
-      cookieDevice: cookie,
+      cookieDevice,
       userAgent: headers['user-agent'] ?? ''
     }))
   }

@@ -57,10 +57,10 @@ usePinnedSection(pinned)
 
 <style scoped>
 .demo { display: flex; flex-direction: column; gap: 24px; padding: 24px 0; }
-section { border: 1px solid #eee; border-radius: 8px; padding: 32px; }
+section { border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; }
 
 /* ③ 视差舞台：overflow hidden 把移出边界的层裁掉 */
-.parallax-stage { position: relative; height: 60vh; overflow: hidden; border-radius: 8px; }
+.parallax-stage { position: relative; height: 60vh; overflow: hidden; border-radius: var(--radius); }
 .parallax-bg { position: absolute; inset: -25% 0; background: radial-gradient(circle at 50% 60%, var(--primary) 0%, transparent 65%); opacity: 0.35; }
 .parallax-fg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 600; }
 
@@ -68,5 +68,5 @@ section { border: 1px solid #eee; border-radius: 8px; padding: 32px; }
 .pin-stage { position: relative; height: 40vh; }
 .pin-step { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600; }
 
-.demo-video-player { max-width: 480px; border-radius: 8px; }
+.demo-video-player { max-width: 480px; border-radius: var(--radius); }
 </style>

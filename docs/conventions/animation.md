@@ -8,10 +8,10 @@
 2. Lenis 全站唯一实例在组合根创建（`autoRaf: false`，交 gsap ticker 驱动）；不使用 lenis/nuxt 模块，不在组件里建实例 `[Review]`
 3. `useAnimation()` 是唯一直接访问 `{ gsap, lenis, reduced }` 的底层口 `[Review]`
 4. 视图 / 页面层禁止 import `gsap` / `lenis` / `lottie-web` `[ESLint]`
-5. 新效果门面照 `app/composables/animation/useReveal.ts` 范式写（四步骨架见下）`[Review]`
+5. 新效果门面用 `createEffect`（`app/composables/animation/createEffect.ts`）收生命周期，自己只写动画配方（照 `useReveal.ts` 抄）`[Review]`
 6. 效果经显式 `data-*` 标记制作用于元素：没标记就不动，防误伤 `[Review]`
-7. 动画全部收纳进 `gsap.context`，`onBeforeUnmount` 里 `revert()`；SplitText 实例单独收集、单独 revert（不受 context 管）`[Review]`
-8. 门面必须在 `onMounted` 里取 `useAnimation()`（`$animation` 是 `.client` 插件，SSR 期不存在），`reduced` 命中直接 return `[Review]`
+7. 动画全部收纳进 `gsap.context`，卸载 `revert()` 由 `createEffect` 统一做；SplitText 这类 context 外实例在配方里返回清理函数（`createEffect` 在 revert 之后执行）。播放器（basic 层）经 `utils/motion.ts` 的 `prefersReducedMotion()` 判降级（查询串单点），播停骨架共用 `basic/common/observePlayPause.ts``[Review]`
+8. `useAnimation()` 必须在 `onMounted` 里取（`$animation` 是 `.client` 插件，SSR 期不存在）——这步已收进 `createEffect`，门面配方里不要再取 `[Review]`
 9. `prefers-reduced-motion` 降级是第一公民：降级时 `lenis` 为 null、元素天然可见、零内联样式；效果门面里不写降级分支以外的降级逻辑 `[Review]`
 10. Lottie 一律走 `BasicCommonLottiePlayer`，不直连 lottie-web `[ESLint]`（视图层）/ `[Review]`（其余）
 
@@ -39,25 +39,19 @@
 
 新效果门面加进域文件夹后，在 `index.ts` 再导出（auto-import 经 `composables/*/index.ts` 生效）。
 
-## 效果门面范式（四步骨架）
+## 效果门面范式（createEffect 收骨架）
 
-照 `useReveal.ts` 抄：
+照 `useReveal.ts` 抄——生命周期骨架（挂载取门面 → 降级跳过 → context → revert）只在 `createEffect.ts` 出现一次：
 
 ```ts
 export function useXxx(target: Ref<HTMLElement | null>, options = {}) {
-  let ctx: gsap.Context | null = null
-  onMounted(() => {
-    const root = target.value
-    const { gsap, reduced } = useAnimation()   // 必须在 onMounted 里取（SSR 期不存在）
-    if (reduced || !root) return               // 降级直接跳过：元素天然可见
-    ctx = gsap.context(() => {
-      root.querySelectorAll('[data-xxx]').forEach((el) => { /* gsap 调用 */ })
-    })
+  createEffect(target, (root, gsap) => {
+    root.querySelectorAll('[data-xxx]').forEach((el) => { /* gsap 调用 */ })
   })
-  onBeforeUnmount(() => ctx?.revert())          // 干掉触发器和内联样式，防换页泄漏
 }
 ```
 
+- SplitText 这类 context 管不到的实例：配方返回清理函数，`createEffect` 在 `ctx.revert()` 之后执行
 - `target` 显式传模板 ref（好过自动去查组件根）
 - 视图用法三行：`const root = ref(null)` → `useReveal(root)` → 模板里 `ref="root"` + 元素打标记
 - 完整示范页：`app/views/pc/AnimationDemoPage.vue`（每一节配一个效果门面）
@@ -67,7 +61,8 @@ export function useXxx(target: Ref<HTMLElement | null>, options = {}) {
 - 业务无感层组件：动画数据 / 路径全从 props 传
 - 动态 import `lottie_web/build/player/lottie_light`（体积约半，首屏不背）
 - 传入内联 `animationData` 时内部 `structuredClone` 深拷贝（lottie 会就地改写常量）
-- 进视口播（IntersectionObserver）、出视口停；卸载时 destroy + disconnect
+- 进视口播、出视口停（共用 `basic/common/observePlayPause.ts` 骨架）；卸载时 stopObserve + destroy
+- prefers-reduced-motion 命中时降级：不挂播停观察器，动画停在首帧静态可见（VideoPlayer 同套路，靠 `preload="metadata"` + poster 停首帧）
 
 ## 路由滚动
 

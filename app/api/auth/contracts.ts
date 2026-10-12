@@ -1,28 +1,8 @@
 /**
- * auth 域契约：登录/会话的入参和返回长什么样
+ * auth 域私有契约：业务错误码。
+ * 载荷契约（LoginPayload / AuthUser / LoginResult）已提升 shared/types/auth.ts（server 共用），此处不再重复。
+ * mock 演示开关白名单已迁登记册 `app/constants/mock.ts`（横切开关不属域私有契约）。
  */
-
-// 登录/会话的入参
-export interface LoginPayload {
-  username: string
-  password: string
-}
-
-// 登录/会话的用户形态
-export interface AuthUser {
-  id: number
-  username: string
-  nickname: string
-}
-
-// 登录/会话的返回形态
-export interface LoginResult {
-  token: string
-  user: AuthUser
-}
 
 // auth 域业务错误码联合。mock 加新分支就在这扩展，同时去 errors.ts 补文案
 export type AuthErrorCode = 1001
-
-// mock 演示开关：'' | 'http500' | 'timeout' | 'expired'，只有登录 demo 在用
-export type MockScene = '' | 'http500' | 'timeout' | 'expired'

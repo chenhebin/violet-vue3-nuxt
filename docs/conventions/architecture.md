@@ -41,8 +41,8 @@
 | `app/stores/` | Pinia 域 store |
 | `app/api/<domain>/` | 域格子：契约 + 接口声明 + 错误码映射 |
 | `app/services/<domain>/` | 域格子：业务规则，依赖全注入；无跨接口状态规则的域不建 |
-| `app/constants/` | 登记册：键名 `keys.ts`、埋点事件名 `track.ts` |
-| `app/utils/` | 纯函数（`cn`、`device` 判定算法） |
+| `app/constants/` | 登记册：键名 `keys.ts`、埋点事件名 `track.ts`、主题枚举与用户覆盖白名单 `theme.ts`、mock 演示场景 `mock.ts` |
+| `app/utils/` | 纯函数（`cn`、`device` 判定算法、`cookies` 读写） |
 | `app/plugins/` | 组合根，每个插件一个装配职责 |
 | `app/middleware/` | 路由守卫，页面经 `definePageMeta` 按需声明 |
 | `server/api/` | Nitro mock 后端（登录、会话、示例接口） |
@@ -76,10 +76,12 @@
 
 ## 登记册制度
 
-四本登记册，先登记后使用：
+六本登记册，先登记后使用：
 
 - `app/constants/keys.ts` — `PINIA_STORE_IDS`（一域一 store，id 即域名）、`COOKIE_KEYS`（统一 `v_` 前缀）
 - `app/constants/track.ts` — `TRACK_EVENTS` 埋点事件名与 `TrackEventName` 联合
+- `app/constants/theme.ts` — 主题枚举 `THEMES` 与用户覆盖白名单 `USER_TOKEN_OVERRIDES`（键与 `shared/types/theme.ts` 的 `UserOverrideKey` 编译期对齐）
+- `app/constants/mock.ts` — mock 演示场景白名单 `MOCK_SCENES`（demo 债务，接真实后端整体拔除）
 - `app/assets/css/tokens.css` — 样式 token（见 [styling-and-assets.md](styling-and-assets.md)）
 - useState 键名前缀制：键写成 `<domain>:<name>`；别的域要读只能走那个域的门面，不许直接 `useState()` 别人的键名
 

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { AnimationItem } from 'lottie-web'
+import { observePlayPause } from './observePlayPause'
 
 /**
  * Lottie 播放器（basic 层，业务无感）：文案和数据全走 props，不依赖任何业务代码或 composable。
  * - 播放器是动态 import 进来的 light 构建（体积小一半，不含表达式求值——设计侧导出时别用表达式就行；
  *   以后要完整版，把 import 换成全量 'lottie-web' 一行搞定）。滚出视口就暂停，看不见就不浪费帧
+ * - prefers-reduced-motion 命中时不挂播停观察器：动画停在首帧、静态可见（降级判定经
+ *   utils/motion 的 prefersReducedMotion()，查询串单点）
  * - src 二选一：传 URL（path）或传 animationData 对象，内联打包还是网络加载由调用方自己定；
  *   传对象时会先深拷贝一份——lottie-web 会就地改写传进去的对象（比如打上 __complete 这类规整标志），
  *   不克隆的话这些改动会漏回调用方的模块级常量里
@@ -17,7 +20,7 @@ const props = withDefaults(defineProps<{ src: string | object; loop?: boolean; s
 
 const container = ref<HTMLElement | null>(null)
 let player: AnimationItem | null = null
-let observer: IntersectionObserver | null = null
+let stopObserve: (() => void) | undefined
 let disposed = false
 
 onMounted(async () => {
@@ -39,21 +42,15 @@ onMounted(async () => {
   player = item
   item.setSpeed(props.speed)
 
-  observer = new IntersectionObserver(
-    (entries) => {
-      const entry = entries[0]
-      if (!entry) return
-      if (entry.isIntersecting) item.play()
-      else item.pause()
-    },
-    { threshold: 0.4 }
-  )
-  observer.observe(el)
+  // prefers-reduced-motion 降级：不挂观察器（autoplay 本便是 false），动画停在首帧静态可见
+  if (prefersReducedMotion()) return
+
+  stopObserve = observePlayPause(el, () => item.play(), () => item.pause())
 })
 
 onBeforeUnmount(() => {
   disposed = true
-  observer?.disconnect()
+  stopObserve?.()
   player?.destroy()
   player = null
 })

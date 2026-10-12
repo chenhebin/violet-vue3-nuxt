@@ -12,7 +12,7 @@ export function useDevice() {
    */
   function switchDevice(d: Device) {
     track(TRACK_EVENTS.deviceSwitch, { to: d })
-    document.cookie = `${COOKIE_KEYS.device}=${d}; path=/; max-age=31536000`
+    document.cookie = buildCookie(COOKIE_KEYS.device, d, { maxAge: 31536000 })
     window.location.reload()
   }
   return { device, isMobile, switchDevice }

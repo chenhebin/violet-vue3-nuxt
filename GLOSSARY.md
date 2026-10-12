@@ -16,7 +16,7 @@
 
 ## 登记册（registry）
 
-全项目只有一份的花名册。键名、事件名、样式 token 先登记再使用，别处不许写字面量。四本登记册：`app/constants/keys.ts`（Pinia id、Cookie 键）、`app/constants/track.ts`（埋点事件名）、`app/assets/css/tokens.css`（样式 token）、以及 useState 的键名前缀制。
+全项目只有一份的花名册。键名、事件名、样式 token 先登记再使用，别处不许写字面量。五本登记册：`app/constants/keys.ts`（Pinia id、Cookie 键）、`app/constants/track.ts`（埋点事件名）、`app/constants/theme.ts`（主题枚举、用户覆盖白名单）、`app/assets/css/tokens.css`（样式 token）、以及 useState 的键名前缀制。
 
 规范：[architecture.md](docs/conventions/architecture.md)、[styling-and-assets.md](docs/conventions/styling-and-assets.md)。
 

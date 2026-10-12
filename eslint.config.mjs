@@ -15,9 +15,10 @@ export default withNuxt(
      * - 禁止用 useState 直接读写全局状态 → 必须走对应域的 composable 门面（像去柜台办事，不进仓库）
      * - 禁止直连动画供应商（gsap/lenis/lottie-web）→ 滚动显现走 useReveal、动效资产走
      *   LottiePlayer、底层访问走 useAnimation（供应商被隔离在门面和 plugins/animation.client.ts 里）
-     * 已知局限：auto-import 不走 import 语句，gsap 直调只能靠 review 兜底；composables/basic 层
-     * 不受这条门禁管（门面和播放器自己就是要用供应商的合法方）。动画禁令和 api/services 禁令必须放在
-     * 本块同一个 no-restricted-imports 里——flat config 下同规则 ID 后面的块会整体盖掉前面的块，拆开写会冲掉先写的禁令
+     * 已知局限：auto-import 不走 import 语句，gsap 直调仍靠 review 兜底（store 直调已由 callee
+     * 选择器机械拦截）；composables/basic 层不受这条门禁管（门面和播放器自己就是要用供应商的合法方）。
+     * 动画禁令和 api/services 禁令必须放在本块同一个 no-restricted-imports 里——flat config 下同规则
+     * ID 后面的块会整体盖掉前面的块，拆开写会冲掉先写的禁令
      */
     files: ['app/views/**/*.vue', 'app/pages/**/*.vue'],
     rules: {
@@ -46,6 +47,9 @@ export default withNuxt(
       'no-restricted-syntax': ['error', {
         selector: "CallExpression[callee.name='useState']",
         message: '视图/页面层禁止直接读写全局状态（useState）：请使用对应域的 composable 门面（如 useAuth()）。'
+      }, {
+        selector: "CallExpression[callee.name=/^use[A-Za-z]*Store$/]",
+        message: '视图/页面层禁止直连 Pinia store（含 auto-import 直调）：状态消费走 composables 域门面（useAuth/useDevice/useTheme…）。'
       }]
     }
   },

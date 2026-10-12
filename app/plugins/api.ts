@@ -21,7 +21,13 @@ export default defineNuxtPlugin({
       secure
     })
     const locale = computed(() => String(nuxtApp.$i18n.locale))
-    const apiClient = useApi({ token: tokenCookie, locale })
+    // mock 演示开关的唯一注入位：scene 只从 URL query 来（登录页下拉/MePage 演示链接都只写 query），
+    // 白名单校验防脏值进接口；接真实后端时删掉这一段与 useApi 的 scene 参数即可
+    const scene = computed(() => {
+      const s = useRoute().query.scene
+      return typeof s === 'string' && (MOCK_SCENES as readonly string[]).includes(s) ? s : ''
+    })
+    const apiClient = useApi({ token: tokenCookie, locale, scene })
     return {
       provide: {
         apiClient,

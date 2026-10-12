@@ -28,5 +28,5 @@ useSplitText(split, { by: 'words' })
 
 <style scoped>
 .demo-m { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
-section { border: 1px solid #eee; border-radius: 8px; padding: 24px; }
+section { border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
 </style>

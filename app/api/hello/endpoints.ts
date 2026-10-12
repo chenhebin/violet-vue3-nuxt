@@ -1,8 +1,8 @@
 import type { ApiClient } from '~/services/types'
-import type { HelloResult } from './contracts'
 
 /**
- * hello 域接口：只声明契约（URL/方法/类型），没有任何逻辑；client 由组合根造好传进来
+ * hello 域接口：只声明契约（URL/方法/类型），没有任何逻辑；client 由组合根造好传进来。
+ * 载荷契约（HelloResult）在 shared/types/hello.ts（跨端共用），此处不再 import。
  */
 
 /**

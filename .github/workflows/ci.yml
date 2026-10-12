@@ -18,11 +18,9 @@ jobs:
 
       - run: npm ci
 
-      # 四连门禁（顺序与 docs/conventions/quality.md 军规 1 一致）
-      - run: npm run typecheck
-      - run: npx eslint .
-      - run: npm run test
-      - run: npm run build
+      # 门禁：票号追溯 + 五连（npm run gate，与 docs/conventions/quality.md 军规 1 一致）
+      - run: npm run check:tickets
+      - run: npm run gate
 
       # E2E：关键旅程回归（webServer 由 playwright.config.ts 用 preview 自管，依赖上一步 build 产物）
       - run: npx playwright install --with-deps chromium

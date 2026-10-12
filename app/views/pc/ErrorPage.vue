@@ -27,5 +27,5 @@ function backHome() {
 .error-code { margin: 0; font-size: 56px; font-weight: 700; color: var(--primary); }
 .error-page h1 { margin: 0; }
 .error-page button { margin-top: 12px; padding: 8px 20px; border: 1px solid var(--primary); border-radius: var(--radius-md); background: none; font: inherit; color: var(--primary); cursor: pointer; }
-.error-page button:hover { background: var(--primary); color: #fff; }
+.error-page button:hover { background: var(--primary); color: var(--primary-foreground); }
 </style>

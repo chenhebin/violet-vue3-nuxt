@@ -1,14 +1,14 @@
 import { SplitText } from 'gsap/SplitText'
-import type { gsap } from 'gsap'
 import type { Ref } from 'vue'
+import { createEffect } from './createEffect'
 
 /**
  * 逐字/逐词入场门面：target 内带 [data-split] 标记的元素被 SplitText 拆开后
  * 按 stagger 一个个浮现（大牌官网标题式入场）。
  * - 拆分粒度 by: 'chars'（逐字）| 'words'（逐词，中文长句推荐，不然字太多太碎）
  * - 全站走系统字体栈（字体模块所有 provider 都禁了），没有 webfont 迟到导致的拆分回流问题
- * - SplitText 实例不归 gsap.context 管：单独收集，卸载时逐个 revert() 把原始文本节点还原
- * - 降级/context/revert 范式同 useReveal
+ * - SplitText 实例不归 gsap.context 管：配方返回清理函数，createEffect 在 ctx.revert() 之后逐个还原原始文本
+ * - 生命周期骨架在 createEffect（降级/context/revert 见 useReveal 头注）
  * @param target 动效舞台的模板 ref（在其内部查找 [data-split] 标记元素）
  * @param options 拆分与入场参数（粒度/位移/错拍/时长/触发起点）
  */
@@ -18,27 +18,19 @@ export function useSplitText(
 ): void {
   const { by = 'chars', y = 24, stagger = 0.02, duration = 0.6, start = 'top 85%' } = options
 
-  let ctx: gsap.Context | null = null
   const splits: SplitText[] = []
 
-  onMounted(() => {
-    const root = target.value
-    const { gsap, reduced } = useAnimation()
-    if (reduced || !root) return
-    ctx = gsap.context(() => {
-      root.querySelectorAll<HTMLElement>('[data-split]').forEach((el) => {
-        const split = new SplitText(el, { type: by })
-        splits.push(split)
-        gsap.from(split[by], { opacity: 0, y, stagger, duration, scrollTrigger: { trigger: el, start } })
+  createEffect(target, (root, gsap) => {
+    root.querySelectorAll<HTMLElement>('[data-split]').forEach((el) => {
+      const split = new SplitText(el, { type: by })
+      splits.push(split)
+      gsap.from(split[by], { opacity: 0, y, stagger, duration, scrollTrigger: { trigger: el, start } })
+    })
+    return () => {
+      splits.forEach((split) => {
+        split.revert()
       })
-    })
-  })
-
-  onBeforeUnmount(() => {
-    ctx?.revert()
-    splits.forEach((split) => {
-      split.revert()
-    })
-    splits.length = 0
+      splits.length = 0
+    }
   })
 }

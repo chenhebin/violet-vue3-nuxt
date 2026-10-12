@@ -1,14 +1,15 @@
 import { ApiError } from '~/api/error'
-import { getMe, postLogin, postLogout, type AuthUser, type LoginPayload, type MockScene } from '~/api/auth'
+import { getMe, postLogin, postLogout } from '~/api/auth'
 import type { ApiClient } from '../types'
 import type { TokenStorage } from './contracts'
 
 // 领域服务的对外契约：用的人（组合根/测试）依赖这个接口，不依赖工厂实现
+// 载荷类型（AuthUser/LoginPayload）来自 shared/types/auth.ts（跨端契约，免 import）
 export interface AuthService {
   isAuthenticated(): boolean
-  login(payload: LoginPayload, scene?: MockScene): Promise<AuthUser>
+  login(payload: LoginPayload): Promise<AuthUser>
   logout(): Promise<void>
-  fetchMe(scene?: MockScene): Promise<AuthUser>
+  fetchMe(): Promise<AuthUser>
 }
 
 /**
@@ -22,8 +23,8 @@ export function createAuthService(client: ApiClient, tokens: TokenStorage): Auth
   return {
     isAuthenticated: () => tokens.read() !== null,
 
-    async login(payload, scene = '') {
-      const { token, user } = await postLogin(client, payload, scene)
+    async login(payload) {
+      const { token, user } = await postLogin(client, payload)
       tokens.write(token)
       return user
     },
@@ -41,11 +42,10 @@ export function createAuthService(client: ApiClient, tokens: TokenStorage): Auth
     /**
      * 会话失效（协议层抛 ApiError['auth']）时先清凭据再原样上抛；
      * 怎么展示、要不要跳转归视图/组合层管，领域层不做 UI 决策。
-     * @param scene mock 异常场景
      */
-    async fetchMe(scene = '') {
+    async fetchMe() {
       try {
-        return await getMe(client, scene)
+        return await getMe(client)
       } catch (e) {
         if (e instanceof ApiError && e.kind === 'auth') tokens.clear()
         throw e

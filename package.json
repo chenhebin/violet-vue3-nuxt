@@ -11,7 +11,10 @@
     "typecheck": "nuxi typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "lint:style": "stylelint 'app/assets/**/*.css' 'app/**/*.vue'",
+    "gate": "npm run typecheck && npx eslint . && npm run lint:style && npm run test && npm run build",
+    "check:tickets": "node scripts/check-ticket-trace.mjs"
   },
   "dependencies": {
     "@nuxt/fonts": "^0.14.0",
@@ -41,6 +44,10 @@
     "@playwright/test": "1.62",
     "@tailwindcss/vite": "^4.3.3",
     "eslint": "^10.11.0",
+    "postcss-html": "^2.0.0",
+    "stylelint": "^16.26.1",
+    "stylelint-config-standard": "^38.0.0",
+    "stylelint-declaration-strict-value": "^1.12.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~5.9.3",
     "vitest": "^5.0.3",

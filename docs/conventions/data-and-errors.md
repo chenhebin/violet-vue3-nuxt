@@ -22,9 +22,9 @@
 
 | 环节 | 位置 | 职责 |
 |---|---|---|
-| 视图 | `app/views/pc/LoginPage.vue` | 只调 `useAuth().login(payload, scene)`；表单与 MockScene 演示开关留在视图 |
+| 视图 | `app/views/pc/LoginPage.vue` | 只调 `useAuth().login(payload)`；MockScene 演示开关经 URL query（`?scene=`）由传输层（plugins/api.ts）注入，视图只负责下拉写 query |
 | 门面 | `app/composables/useAuth.ts` | 跳转 / 埋点 / 文案编排；调域 store |
-| store | `app/stores/auth.ts` | 状态（pending / error / user 快照）与业务结果 |
+| store | `app/stores/auth.ts` | 状态（pending / error / 记住的用户名）与业务结果 |
 | 领域服务 | `app/services/auth/auth.service.ts` | 业务规则（token 何时清）；client 从组合根注入 |
 | 接口声明 | `app/api/auth/endpoints.ts` | 只声明 URL / 方法 / 载荷 / 类型，client 是参数 |
 | 客户端 | `app/composables/useApi.ts` | 塞头（设备 / 语言 / 凭据）、拆信封、错误归一 |
@@ -53,14 +53,13 @@
 - 动作错误与查询错误分开：`error` 只由动作（login）写，查询类失败走 AsyncOutcome 由页面消费——防跨页幽灵文案
 - 异常统一 `toOutcome` 转数据；登出这类「不管后端成不成本地都清理」的语义用 service 的 try/finally + toOutcome 吞异常保证
 - 持久化只 pick 必要字段（防水合错位；SSR 服务端没有 localStorage）；会话恢复走 cookie + fetchMe 刷新
-- 真相源约定示例：登录与否以 cookie 为唯一真相源，store 里的 user 只是给全局 UI 读的登录快照
 
 ## server 侧（Nitro mock）
 
 - 路由文件 `server/api/<domain>/<action>.<method>.ts`；造信封只有 `server/utils/envelope.ts` 的 `apiOk` / `apiFail`
 - 成功 = HTTP 200 + `code: 0`；业务失败 = HTTP 200 + `code ≠ 0`（用户文案由客户端域错误表解析）；传输失败 = `createError({ statusCode })`
-- mock 场景开关（`scene` 查询参数）用于演示异常分支：`timeout` 吊 30 秒（让客户端 10 秒超时先到）、`http500` 抛 5xx、错误凭据返回业务码
-- 接真实后端：`runtimeConfig.public.apiBase` 指向真网关，拔掉 mock 与 MockScene 开关（见 [quality.md](quality.md)）
+- mock 场景开关（`scene` 查询参数）用于演示异常分支：`timeout` 吊 30 秒（让客户端 10s 超时先到）、`http500` 抛 5xx、错误凭据返回业务码；scene 经 URL query 由传输层（plugins/api.ts）统一注入，业务签名不带它
+- 接真实后端：`runtimeConfig.public.apiBase` 指向真网关，拔掉 MockScene 演示开关共 5 处——`app/constants/mock.ts` 登记处（白名单 MOCK_SCENES）、plugins/api.ts 注入点（含 useMe 的 scene watch 联动）、server 的 scene 分支（login.post.ts / me.get.ts）、LoginPage 下拉、MePage 过期链接（见 [quality.md](quality.md)）
 
 ## 埋点（旁路）
 

@@ -11,10 +11,12 @@
 
 // Pinia 域 store 的 id 登记册：一域一 store，id 即域名
 export const PINIA_STORE_IDS = {
-  // auth 域：登录态快照、登录动作错误、记住的用户名（localStorage 持久化 pick）
+  // auth 域：登录动作错误、记住的用户名（localStorage 持久化 pick）
   auth: 'auth',
   // device 域：设备结论（唯一写入方是 plugins/device.server.ts；持久化走 v_device cookie，store 不落 localStorage）
-  device: 'device'
+  device: 'device',
+  // theme 域：当前主题（唯一写入方 plugins/theme.server.ts 与 useTheme 门面；持久化走 v_theme cookie，不落 localStorage）
+  theme: 'theme'
 } as const
 
 // Cookie 键登记
@@ -23,6 +25,10 @@ export const COOKIE_KEYS = {
   token: 'v_token',
   // 用户手动切端的选择，优先级高于 UA 判定
   device: 'v_device',
+  // 主题偏好（light/dark），SSR 直出 <html data-theme>
+  theme: 'v_theme',
+  // 用户自定义覆盖（白名单键 primary/radius 的序列化串），SSR 直出 <html style="--primary:…">
+  userTheme: 'v_utheme',
   // 语言偏好；要和 nuxt.config 的 i18n.detectBrowserLanguage.cookieKey 保持一致
   locale: 'v_locale'
 } as const

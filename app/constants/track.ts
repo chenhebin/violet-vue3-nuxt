@@ -8,7 +8,7 @@
  * 3. 事件属性（device/locale 自动注入那些除外）写在各挂点处，不在这里建模板
  */
 
-// 业务事件登记（auth 域挂点在 app/composables/useAuth.ts；设备域挂点在 app/composables/useDevice.ts）
+// 业务事件登记（auth 域挂点在 app/composables/useAuth.ts；设备域挂点在 app/composables/useDevice.ts；主题域挂点在 app/composables/theme/）
 export const TRACK_EVENTS = {
   // 登录成功；登录后另有 identify 关联会话
   loginSuccess: 'login_success',
@@ -19,7 +19,11 @@ export const TRACK_EVENTS = {
   // 会话过期（loadMe 收到 auth 类失败）
   sessionExpired: 'session_expired',
   // 手动切端；属性：to ('pc'|'m')
-  deviceSwitch: 'device_switch'
+  deviceSwitch: 'device_switch',
+  // 手动切主题；属性：to ('light'|'dark')
+  themeSwitch: 'theme_switch',
+  // 保存用户自定义覆盖；属性：keys（逗号串，如 primary,radius）
+  userThemeCommit: 'user_theme_commit'
 } as const
 
 // 登记册所有值的联合类型

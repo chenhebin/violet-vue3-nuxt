@@ -5,7 +5,7 @@ import type { AuthErrorCode } from './contracts'
  *
  * 规矩：contracts.ts 里扩展了 AuthErrorCode 联合，就必须来这里补映射。
  * satisfies 穷尽检查保证漏译时编译不过——而不是等上线后用户看到一串裸码。
- * 只收「字段级」展示的码；横幅级业务码走 error.fallback 兜底。
+ * 只收「字段级」展示的码；横幅级业务码走全站横幅表的兜底文案（见 api/error.ts）。
  */
 export const AUTH_ERROR_I18N = {
   1001: 'error.1001'

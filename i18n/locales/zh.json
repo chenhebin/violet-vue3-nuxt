@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "首页", "about": "关于" },
+  "nav": { "home": "首页", "about": "关于", "themeDark": "深色", "themeLight": "浅色" },
   "home": { "title": "Violet 首页", "desc": "Violet C 端站点骨架示例页" },
   "about": { "title": "关于我们", "desc": "关于 Violet 的介绍页" },
   "animation": {
@@ -38,7 +38,15 @@
     "logout": "登出",
     "relogin": "去登录",
     "expired": "登录已过期，请重新登录",
-    "simulateExpired": "模拟 token 过期"
+    "simulateExpired": "模拟 token 过期",
+    "theme": {
+      "title": "个性化",
+      "primary": "主色",
+      "radius": "圆角",
+      "preview": "预览",
+      "save": "保存",
+      "reset": "重置"
+    }
   },
   "error": {
     "notFound": "页面不存在",

@@ -171,19 +171,20 @@ flowchart TD
 │   ├── app.vue                # 根组件：按设备挑布局 + 标题模板「xx · Violet」
 │   ├── error.vue              # 全局错误页薄壳：双模板分发 + 设备重判
 │   ├── router.options.ts      # 路由滚动接管（Lenis 优先，降级回落原生）
-│   ├── assets/css/            # main.css 装配 / tokens.css 登记册 / base.css 基线
-│   ├── constants/             # 登记册：键名 keys.ts、埋点事件名 track.ts
+│   ├── assets/css/            # main.css 装配 / tokens.css 登记册 / themes/dark.css 暗色主题包 / base.css 基线
+│   ├── constants/             # 登记册：键名 keys.ts、埋点事件名 track.ts、主题枚举与用户覆盖白名单 theme.ts
 │   ├── middleware/auth.ts     # 受保护路由门卫，未登录踢去 /login 并带 redirect
-│   ├── plugins/               # 组合根：api / auth / device.server / track.client / animation.client
+│   ├── plugins/               # 组合根：api / auth / device.server / theme.server / track.client / animation.client
 │   ├── composables/           # 门面层：useAuth、useApi、useTrack、useDevice、useLocale、usePageMeta、useHello
-│   │   └── animation/         # 动画域文件夹：useAnimation + 五个效果门面，经 index.ts 再导出
-│   ├── stores/               # Pinia 域 store：auth（含 localStorage 持久化示范）、device
+│   │   ├── animation/         # 动画域文件夹：useAnimation + 五个效果门面，经 index.ts 再导出
+│   │   └── theme/             # 主题域文件夹：useTheme（切换）+ useUserTheme（用户覆盖），经 index.ts 再导出
+│   ├── stores/               # Pinia 域 store：auth（含 localStorage 持久化示范）、device、theme
 │   ├── api/                   # 域格子：auth/、hello/（契约+接口+错误码）+ error.ts 公共错误件
 │   ├── services/              # 领域服务：auth/（业务规则，依赖全注入）+ types.ts 跨域端口
 │   ├── utils/                 # 纯函数：cn（类名合并）、device（设备判定算法）
 │   ├── pages/                 # 路由薄壳：index / login / me / about / animation
 │   ├── views/                 # 真正的页面模板：pc/ 与 m/ 两套，各自演进
-│   ├── layouts/               # 双端布局壳 pc.vue / m.vue：导航 + 切语言 + 切端
+│   ├── layouts/               # 双端布局壳 pc.vue / m.vue：导航 + 切语言 + 切主题 + 切端
 │   └── components/
 │       ├── ui/                # shadcn 拷贝制组件（Ui 前缀，业务无感）
 │       ├── basic/             # 通用原子件：common/ 下 LottiePlayer、VideoPlayer（业务无感）
@@ -191,11 +192,13 @@ flowchart TD
 ├── server/
 │   ├── api/                   # Nitro mock：hello、auth（登录 / 会话 / 登出）
 │   └── utils/envelope.ts      # 信封工厂 apiOk / apiFail
-├── shared/types/              # 跨端纯类型：信封、错误形状、AsyncOutcome、Device
+├── shared/types/              # 跨端纯类型：信封、错误形状、AsyncOutcome、Device、Theme
 ├── i18n/locales/              # zh.json / en.json
 ├── public/demo/               # URL 引用型静态资源（video src 这类，不进打包）
+├── tests/                     # 测试集中地：unit/（Vitest 纯逻辑）、e2e/（Playwright 关键旅程）、helpers/（桩）
 ├── deploy/umami/              # Umami 本地栈 docker-compose
 ├── eslint.config.mjs          # 五个配置块：全站公共 + 四块分层门禁
+├── stylelint.config.mjs       # 样式门禁：颜色 / 圆角必须走 token（scale-unlimited/declaration-strict-value）
 ├── nuxt.config.ts             # 模块序 / i18n / runtimeConfig / nitro Vary 头
 ├── components.json            # shadcn 配置
 ├── .env.example               # Umami 两个环境变量
@@ -233,10 +236,10 @@ flowchart TD
 
 按顺序读：
 
-1. 视图（`views/pc/LoginPage.vue`）只调 `useAuth().login(payload, scene)`，表单和 `MockScene` 演示开关留在视图。
+1. 视图（`views/pc/LoginPage.vue`）只调 `useAuth().login(payload)`；`MockScene` 演示开关经 URL query（`?scene=`）由传输层（`plugins/api.ts`）统一注入，视图只负责下拉写 query。
 2. `useAuth`（门面）调 auth 域 store（`useAuthStore().login`）：store 负责状态（pending/error/user 快照）与业务结果，经 `useNuxtApp` 调组合根注入的 `$authService.login`。领域服务拿到 token 就经 `TokenStorage` 端口写 cookie，返回 user——它不知道 HTTP 细节，cookie 实现在 `plugins/api.ts`。
 3. 领域服务调 `api/auth/endpoints.ts` 的 `postLogin`：只声明 URL / 方法 / 载荷 / 类型，client 是参数传进来的。
-4. client 由 `useApi` 造（`$fetch.create`）：每个请求动态塞 `x-v-device`、`accept-language`、`authorization` 头，超时 10 秒。
+4. client 由 `useApi` 的 `createGatewayClient` 工厂造（ofetch `createFetch`）：每个请求动态塞 `x-v-device`、`accept-language`、`authorization` 头，超时 10 秒；SSR 期相对基地址拼请求 origin 走回环。
 5. Nitro mock（`server/api/auth/login.post.ts`）校验账号；`scene` 开关模拟异常路径：`timeout` 吊 30 秒让客户端 10 秒超时先到（network 类）、`http500` 直接抛 5xx（http 类）、密码错返回 200 + `code 1001`（business 类）。
 6. 响应回来先过信封：`code === 0` 就把 `body.data` 直接赋给 `response._data`，调用方拿到的就是业务数据；`code !== 0` 抛 `ApiError('business', code)`。
 7. 异常再经 `toOutcome` 转成 `AsyncOutcome` 数据（错误必须以可序列化的快照形态过 SSR，原因见「🚨 错误体系」）。
@@ -268,8 +271,8 @@ export function useHello() {
 
 ## 🎨 样式搭建
 
-- `main.css` 是唯一入口（nuxt.config 的 `css` 数组只指向它），装配顺序：`tailwindcss` → `tw-animate-css` → `lenis/dist/lenis.css`（平滑滚动官方修正）→ `tokens.css` → `base.css`。
-- `tokens.css` 是 token 登记册：全站唯一样式出处。制度是新 token 先登记再使用，只登记有人用的，设计没定下来的不预先登记。`:root` 放 CSS 变量，`@theme inline` 把它们映射成 Tailwind 工具类（`--primary → text-primary` 这类）。以后 Dialog / Popover / 暗色模式按需补登记。
+- `main.css` 是唯一入口（nuxt.config 的 `css` 数组只指向它），装配顺序：`tailwindcss` → `tw-animate-css` → `lenis/dist/lenis.css`（平滑滚动官方修正）→ `tokens.css` → `themes/dark.css` → `base.css`（themes 在 tokens 之后：同特异度后写者赢）。
+- `tokens.css` 是 token 登记册：全站唯一样式出处。制度是新 token 先登记再使用，只登记有人用的，设计没定下来的不预先登记。`:root` 放 CSS 变量，`@theme inline` 把它们映射成 Tailwind 工具类（`--primary → text-primary` 这类）。`themes/dark.css` 是暗色主题包：`[data-theme="dark"]` 只覆盖已登记的语义 token，切换机制见 `docs/conventions/styling-and-assets.md`。
 - `base.css` 是全局基线：元素默认值 + 页面切换过渡（`pageTransition` 作用在页面组件包裹层，所以必须写全局）。
 - scoped 纪律：分端布局样式在 `layouts/pc.vue`、`m.vue` 的 `<style scoped>` 里，视图样式在各视图 SFC 里；全局只留 token 和基线，谁也不许往全局塞业务样式。
 - 静态资源二分：要进打包的走 `app/assets/` import；用 URL 引用的（video src、lottie path）放 `public/<域>/`。
